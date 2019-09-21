@@ -1,7 +1,7 @@
 import request from 'supertest';
 import randomstring from 'randomstring';
 import app from '../app';
-import { dbConnection, mockUser } from './index';
+import { dbConnection, mockUser } from './init';
 
 describe('Регистрация', () => {
   dbConnection();
@@ -13,7 +13,7 @@ describe('Регистрация', () => {
       .field('surname', randomstring.generate())
       .field('password', randomstring.generate());
 
-    const { user } = result.body;
+    const { user } = result.body.data;
 
     expect(result.statusCode).toEqual(200);
     expect(user).toHaveProperty('id');
@@ -28,7 +28,7 @@ describe('Регистрация', () => {
       .field('password', mockUser.password);
     const { error } = JSON.parse(result.error.text);
 
-    expect(result.statusCode).toEqual(500);
+    expect(result.statusCode).toEqual(403);
     expect(error).toHaveProperty('message');
     expect(error).toHaveProperty('stack');
   });

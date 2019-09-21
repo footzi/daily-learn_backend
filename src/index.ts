@@ -1,12 +1,12 @@
 import { createConnection } from 'typeorm';
 import { listenApp } from './app';
-import config from 'config';
+import { database } from '../server.config.json';
 
-const database = config.get('database');
-
-createConnection({...database})
+// @ts-ignore
+createConnection(database)
   .then((): void => {
     listenApp();
+    // @ts-ignore
     console.log(`> Database connection to ${database.host}`);
   })
   .catch((error: string): void => {

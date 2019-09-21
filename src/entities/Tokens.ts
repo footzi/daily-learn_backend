@@ -8,12 +8,12 @@ export default class Tokens {
     this.refresh = '';
   }
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    userId: number;
+  @Column()
+  userId: number;
 
-    @Column()
-    refresh: string;
+  @Column()
+  refresh: string;
 }

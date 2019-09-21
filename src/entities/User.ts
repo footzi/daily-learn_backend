@@ -11,21 +11,21 @@ export default class User {
     this.updateDate = '';
   }
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    name: string;
+  @Column()
+  name: string;
 
-    @Column()
-    surname: string;
+  @Column()
+  surname: string;
 
-    @Column()
-    password: string;
+  @Column()
+  password: string;
 
-    @CreateDateColumn()
-    createDate: string;
+  @CreateDateColumn()
+  createDate: string;
 
-    @UpdateDateColumn()
-    updateDate: string;
+  @UpdateDateColumn()
+  updateDate: string;
 }

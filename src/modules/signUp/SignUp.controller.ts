@@ -2,33 +2,36 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import randomstring from 'randomstring';
-import config from 'config';
 import { ISignUpController } from './i-signup';
 import SingUpModel from './SignUp.model';
 import User from '../../entities/User';
-import { checkTypeValue, errorMessage, errorTypeMessage } from '../../utils';
+import { secret, expire_access, expire_refresh } from '../../../server.config.json';
+import { checkTypeValue, errorMessage, errorTypeMessage, sendData } from '../../utils';
 import TokenModel from '../tokens/Token.model';
 
 export default class SignUpController implements ISignUpController {
   body: {
-    name: string,
-    surname: string,
-    password: string,
-  }
+    name: string;
+    surname: string;
+    password: string;
+  };
+
   user: {
-    id: number
-  }
+    id: number;
+  };
+
   tokens: {
-    access: string,
-    refresh: string
-  }
+    access: string;
+    refresh: string;
+  };
+
   constructor() {
     this.body = { name: '', surname: '', password: '' };
     this.user = { id: 0 };
     this.tokens = { access: '', refresh: '' };
   }
 
-  public async signUp(req: Request, res: Response) {
+  public async signUp(req: Request, res: Response): Promise<void> {
     this.body = req.body;
 
     try {
@@ -39,11 +42,13 @@ export default class SignUpController implements ISignUpController {
       this.send(res);
     } catch (error) {
       const code = error.type === 'not_access' ? 403 : 500;
-      res.status(code).send(errorMessage(error.content));
+      const data = sendData('', errorMessage(error.content));
+
+      res.status(code).send(data);
     }
   }
 
-  private checkValue() {
+  private checkValue(): void {
     const { name, surname, password } = this.body;
     const isValidName = checkTypeValue(name, 'string');
     const isValidSurname = checkTypeValue(surname, 'string');
@@ -54,22 +59,21 @@ export default class SignUpController implements ISignUpController {
     }
   }
 
-  private async hasUser() {
+  private async hasUser(): Promise<void> {
     const { name } = this.body;
 
     try {
       const hasUser = await SingUpModel.hasUser(name);
 
       if (hasUser) {
-        throw errorTypeMessage('not_access', 'Данного пользователь уже существует');
+        throw errorTypeMessage('not_access', 'Данный пользователь уже существует');
       }
-
     } catch (error) {
       throw errorTypeMessage('critical', error);
     }
   }
 
-  private async saveUser() {
+  private async saveUser(): Promise<void> {
     const { name, surname, password } = this.body;
     const passwordHash = bcrypt.hashSync(password, 10);
 
@@ -84,14 +88,12 @@ export default class SignUpController implements ISignUpController {
     }
   }
 
-  private createTokens() {
-    const secret = config.get('secret');
-    const expire_access = config.get('expire_access');
-    const expire_refresh = config.get('expire_refresh');
-
+  private createTokens(): void {
     const access = { id: this.user.id };
     const refresh = { id: this.user.id, key: randomstring.generate() };
+    // @ts-ignore
     this.tokens.access = jwt.sign(access, secret, { expiresIn: expire_access });
+     // @ts-ignore
     this.tokens.refresh = jwt.sign(refresh, secret, { expiresIn: expire_refresh });
 
     try {
@@ -101,8 +103,9 @@ export default class SignUpController implements ISignUpController {
     }
   }
 
-  private send(res: Response) {
-    const response = { id: this.user.id, access_token: this.tokens.access, refresh_token: this.tokens.refresh };
-    res.send({ user: response });
+  private send(res: Response): void {
+    const user = { id: this.user.id, access_token: this.tokens.access, refresh_token: this.tokens.refresh };
+    const data = sendData({ user });
+    res.send(data);
   }
 }

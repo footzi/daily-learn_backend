@@ -2,11 +2,10 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import cors from 'cors';
-import config from 'config';
+import { port } from '../server.config.json';
 import api from './routers/api';
 
 const app = express();
-const port = config.get('port');
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));

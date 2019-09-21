@@ -7,7 +7,7 @@ export default class SignUpModel {
   public static async hasUser(name: string) {
     return await getRepository(User)
       .findOne({ name })
-      .then((result: IUser | undefined): boolean => result ? true : false)
+      .then((result: IUser | undefined): boolean => !!result)
       .catch((error: Error): Error => error);
   }
 

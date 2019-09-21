@@ -13,10 +13,8 @@ export interface IFormLogin {
 }
 
 export interface IErrorMessage {
-  error: {
-    message: string;
-    stack: string;
-  };
+  message: string;
+  stack: string;
 }
 
 export interface IErrorTypeMessage {
