@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "npm run env-prod && tsc --build",
     "start": "node ./build/index.js",
-    "dev": "npm run env-prod && ts-node-dev --respawn --transpileOnly  ./src/index.ts",
+    "dev": "npm run env-dev && ts-node-dev --respawn --transpileOnly  ./src/index.ts",
     "dev-test": "npm run env-test && ts-node-dev --respawn --transpileOnly  ./src/index.ts",
     "test": "npm run env-test && jest",
     "lint": "eslint -c .eslintrc --ext .js,.ts ./src",

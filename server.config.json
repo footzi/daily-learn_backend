@@ -14,7 +14,7 @@
     "database": "heroku_311563abd958ad8",
     "synchronize": true,
     "entities": [
-      "./src/entities/*.ts"
+      "./build/entities/*.js"
     ]
   },
   "secret": "jwt-secret",

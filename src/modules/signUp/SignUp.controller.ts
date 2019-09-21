@@ -5,9 +5,10 @@ import randomstring from 'randomstring';
 import { ISignUpController } from './i-signup';
 import SingUpModel from './SignUp.model';
 import User from '../../entities/User';
-import { secret, expire_access, expire_refresh } from '../../../server.config.json';
 import { checkTypeValue, errorMessage, errorTypeMessage, sendData } from '../../utils';
 import TokenModel from '../tokens/Token.model';
+
+const CONFIG = require('../../../server.config.json');
 
 export default class SignUpController implements ISignUpController {
   body: {
@@ -92,9 +93,9 @@ export default class SignUpController implements ISignUpController {
     const access = { id: this.user.id };
     const refresh = { id: this.user.id, key: randomstring.generate() };
     // @ts-ignore
-    this.tokens.access = jwt.sign(access, secret, { expiresIn: expire_access });
+    this.tokens.access = jwt.sign(access, CONFIG.secret, { expiresIn: CONFIG.expire_access });
      // @ts-ignore
-    this.tokens.refresh = jwt.sign(refresh, secret, { expiresIn: expire_refresh });
+    this.tokens.refresh = jwt.sign(refresh, CONFIG.secret, { expiresIn: CONFIG.expire_refresh });
 
     try {
       TokenModel.save({ userId: this.user.id, refresh: this.tokens.refresh });

@@ -1,5 +1,5 @@
 module.exports = {
-  port: process.env.PORT || 8080,
+  port: 8080,
   host: {
     api: '192.168.0.100'
   },
@@ -13,7 +13,7 @@ module.exports = {
     password: '039786a4',
     database: 'heroku_311563abd958ad8',
     synchronize: true,
-    entities: ['./build/entities/*.js']
+    entities: ['./src/entities/*.ts']
   },
   secret: 'jwt-secret',
   expire_access: '120',

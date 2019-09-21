@@ -1,13 +1,14 @@
 import { createConnection } from 'typeorm';
 import { listenApp } from './app';
-import { database } from '../server.config.json';
+
+const CONFIG = require('../server.config.json');
 
 // @ts-ignore
-createConnection(database)
+createConnection(CONFIG.database)
   .then((): void => {
     listenApp();
     // @ts-ignore
-    console.log(`> Database connection to ${database.host}`);
+    console.log(`> Database connection to ${CONFIG.database.host}`);
   })
   .catch((error: string): void => {
     console.log(`> Error connection to database ${error}`);
