@@ -6,6 +6,9 @@ import api from './routers/api';
 
 const CONFIG = require('../server.config.json');
 
+console.log(CONFIG);
+console.log(process.env.PORT);
+
 const app = express();
 
 app.use(cookieParser());
