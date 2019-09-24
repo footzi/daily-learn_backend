@@ -11,6 +11,7 @@
     "test": "npm run env-test && jest",
     "lint": "eslint -c .eslintrc --ext .js,.ts ./src",
     "lint-fix": "eslint -c .eslintrc --ext .js,.ts ./src --fix",
+    "env-dev": "node env --dev",
     "env-prod": "node env --prod",
     "env-test": "node env --test"
   },
@@ -32,6 +33,7 @@
     "eslint-config-prettier": "^6.3.0",
     "eslint-plugin-prettier": "^3.1.1",
     "express": "^4.17.1",
+    "ip": "^1.1.5",
     "jsonwebtoken": "^8.5.1",
     "multer": "^1.4.2",
     "mysql": "^2.17.1",

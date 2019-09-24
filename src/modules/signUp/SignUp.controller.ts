@@ -12,8 +12,8 @@ const CONFIG = require('../../../server.config.json');
 
 export default class SignUpController implements ISignUpController {
   body: {
-    name: string;
-    surname: string;
+    login: string;
+    email?: string;
     password: string;
   };
 
@@ -27,13 +27,15 @@ export default class SignUpController implements ISignUpController {
   };
 
   constructor() {
-    this.body = { name: '', surname: '', password: '' };
+    this.body = { login: '', email: '', password: '' };
     this.user = { id: 0 };
     this.tokens = { access: '', refresh: '' };
   }
 
   public async signUp(req: Request, res: Response): Promise<void> {
-    this.body = req.body;
+    this.body.login = req.body.login;
+    this.body.password = req.body.password;
+    this.body.email = req.body.email || '';
 
     try {
       this.checkValue();
@@ -50,21 +52,20 @@ export default class SignUpController implements ISignUpController {
   }
 
   private checkValue(): void {
-    const { name, surname, password } = this.body;
-    const isValidName = checkTypeValue(name, 'string');
-    const isValidSurname = checkTypeValue(surname, 'string');
+    const { login, password } = this.body;
+    const isValidLogin = checkTypeValue(login, 'string');
     const isValidPassword = checkTypeValue(password, 'string');
 
-    if (!isValidName || !isValidSurname || !isValidPassword) {
+    if (!isValidLogin || !isValidPassword) {
       throw errorTypeMessage('not_access', 'Oт клиента получены неверные данные');
     }
   }
 
   private async hasUser(): Promise<void> {
-    const { name } = this.body;
+    const { login } = this.body;
 
     try {
-      const hasUser = await SingUpModel.hasUser(name);
+      const hasUser = await SingUpModel.hasUser(login);
 
       if (hasUser) {
         throw errorTypeMessage('not_access', 'Данный пользователь уже существует');
@@ -75,11 +76,11 @@ export default class SignUpController implements ISignUpController {
   }
 
   private async saveUser(): Promise<void> {
-    const { name, surname, password } = this.body;
+    const { login, email, password } = this.body;
     const passwordHash = bcrypt.hashSync(password, 10);
 
     try {
-      const user = await SingUpModel.saveUser({ name, surname, password: passwordHash });
+      const user = await SingUpModel.saveUser({ login, email, password: passwordHash });
 
       if (user instanceof User) {
         this.user.id = user.id;
@@ -92,9 +93,8 @@ export default class SignUpController implements ISignUpController {
   private createTokens(): void {
     const access = { id: this.user.id };
     const refresh = { id: this.user.id, key: randomstring.generate() };
-    // @ts-ignore
+
     this.tokens.access = jwt.sign(access, CONFIG.secret, { expiresIn: CONFIG.expire_access });
-     // @ts-ignore
     this.tokens.refresh = jwt.sign(refresh, CONFIG.secret, { expiresIn: CONFIG.expire_refresh });
 
     try {

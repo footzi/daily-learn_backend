@@ -1,8 +1,8 @@
+const ip = require('ip');
+
 module.exports = {
   port: 8080,
-  host: {
-    api: '192.168.0.100'
-  },
+  host: ip.address(),
   domain: 'http://192.168.0.100:8080',
   static: 'C:\\projects\\pet_life',
   database: {

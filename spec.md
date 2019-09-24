@@ -20,7 +20,7 @@
 # Регистрация
 
 ## Request
-`/signup` - `name, surname, password` нового пользователя
+`/signup` - `login, email (не обязательный), password` нового пользователя
 
 ## Controller
 - проверка на валидность полученных данных

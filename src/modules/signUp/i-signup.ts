@@ -14,12 +14,12 @@ export interface ISignUpController {
 }
 
 export interface ISignUpModel {
-  hasUser(name: string): Promise<boolean | Error>;
+  hasUser(login: string): Promise<boolean | Error>;
   saveUser(body: IRequestSingUp): Promise<User | Error>;
 }
 
 export interface IRequestSingUp {
-  name: string;
-  surname: string;
+  login: string;
+  email?: string;
   password: string;
 }
