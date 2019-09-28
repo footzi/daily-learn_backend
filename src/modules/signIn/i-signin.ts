@@ -1,20 +1,20 @@
 import { Request, Response } from 'express';
 
-export interface ISignUpController {
-  body: IRequestSingUp;
+export interface ISignInController {
+  body: IRequestSingIn;
   user: {
     id: number;
+    password: string;
   };
   tokens: {
     access: string;
     refresh: string;
     expire: number;
   };
-  signUp(req: Request, res: Response): Promise<void>;
+  signIn(req: Request, res: Response): Promise<void>;
 }
 
-export interface IRequestSingUp {
+export interface IRequestSingIn {
   login: string;
-  email?: string;
   password: string;
 }

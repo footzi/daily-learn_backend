@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import express from 'express';
 import cors from 'cors';
 import api from './routers/api';
+import screens from './routers/screens';
 
 const CONFIG = require('../server.config.json');
 
@@ -13,6 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use('/api', cors({ credentials: true, origin: `http://localhost:3000` }), api);
+app.use('/screens', cors({ credentials: true, origin: `http://localhost:3000` }), screens);
 
 export const listenApp = (): void => {
   app.listen(CONFIG.port, CONFIG.host, (): void => {

@@ -1,24 +1,24 @@
+import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { Request, Response } from 'express';
 import randomstring from 'randomstring';
-import SingUpModel from './SignUp.model';
-import User from '../../entities/User';
+import SignInModel from './SignIn.model';
 import TokenModel from '../tokens/Token.model';
+import User from '../../entities/User';
+import { ISignInController } from './i-signin';
 import { checkTypeValue, errorMessage, errorTypeMessage, sendData } from '../../utils';
-import { ISignUpController } from './i-signup';
 
 const CONFIG = require('../../../server.config.json');
 
-export default class SignUpController implements ISignUpController {
+export default class SignInController implements ISignInController {
   body: {
     login: string;
-    email?: string;
     password: string;
   };
 
   user: {
     id: number;
+    password: string;
   };
 
   tokens: {
@@ -28,20 +28,19 @@ export default class SignUpController implements ISignUpController {
   };
 
   constructor() {
-    this.body = { login: '', email: '', password: '' };
-    this.user = { id: 0 };
+    this.body = { login: '', password: '' };
+    this.user = { id: 0, password: '' };
     this.tokens = { access: '', refresh: '', expire: 0 };
   }
 
-  public async signUp(req: Request, res: Response): Promise<void> {
+  public async signIn(req: Request, res: Response): Promise<void> {
     this.body.login = req.body.login;
     this.body.password = req.body.password;
-    this.body.email = req.body.email || '';
 
     try {
       this.checkValue();
-      await this.hasUser();
-      await this.saveUser();
+      await this.getUser();
+      this.checkPassword();
       this.createTokens();
       this.send(res);
     } catch (error) {
@@ -62,32 +61,28 @@ export default class SignUpController implements ISignUpController {
     }
   }
 
-  private async hasUser(): Promise<void> {
-    const { login } = this.body;
-
+  private async getUser(): Promise<void> {
     try {
-      const hasUser = await SingUpModel.hasUser(login);
+      const user = await SignInModel.signIn(this.body.login);
 
-      if (hasUser) {
-        throw errorTypeMessage('not_access', 'Данный пользователь уже существует');
+      if (user && user instanceof User) {
+        this.user.id = user.id;
+        this.user.password = user.password;
       }
     } catch (error) {
       throw errorTypeMessage('critical', error);
     }
+
+    if (!this.user.id && !this.user.password) {
+      throw errorTypeMessage('not_access', 'Данного пользователя не существует');
+    }
   }
 
-  private async saveUser(): Promise<void> {
-    const { login, email, password } = this.body;
-    const passwordHash = bcrypt.hashSync(password, 10);
+  private checkPassword(): void {
+    const checkPassword = bcrypt.compareSync(this.body.password, this.user.password);
 
-    try {
-      const user = await SingUpModel.saveUser({ login, email, password: passwordHash });
-
-      if (user instanceof User) {
-        this.user.id = user.id;
-      }
-    } catch (error) {
-      throw errorTypeMessage('critical', error);
+    if (!checkPassword) {
+      throw errorTypeMessage('not_access', 'Неверный пароль');
     }
   }
 
