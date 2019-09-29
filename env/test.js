@@ -16,6 +16,6 @@ module.exports = {
     entities: ['./src/entities/*.ts']
   },
   secret: 'jwt-secret',
-  expire_access: '120',
+  expire_access: '30d',
   expire_refresh: '30d'
 };

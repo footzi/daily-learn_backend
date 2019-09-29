@@ -1,42 +1,32 @@
 import { getRepository } from 'typeorm';
 import Tokens from '../../entities/Tokens';
-import { IToken } from '../../interfaces';
+import { IToken } from './i-tokens';
+import { errorTypeMessage } from '../../utils';
 
 export default class TokenModel {
-  // @ts-ignore
-  public static async save(body: IToken): Promise<IToken> {
-    const tokens = new Tokens();
+  public static async save(body: IToken): Promise<void | Error> {
+    const { userId, refresh } = body;
 
-    await getRepository(Tokens)
-      .save(Object.assign(tokens, body))
-      .then((result: IToken): IToken => result)
-      .catch((error: Error): Error => error);
-  }
-
-  // @ts-ignore
-  public static async get(userId: number): Promise<IToken> {
-    // @ts-ignore
-    await getRepository(Tokens)
-      .findOne({ userId })
-      // @ts-ignore
-      .then((result: IToken): IToken => result)
-      .catch((error: Error): Error => error);
-  }
-
-  public static async update(userId: number, refresh: string): Promise<IToken> {
     try {
-      const user = await getRepository(Tokens).findOne({ userId });
+      const hasUser = await getRepository(Tokens).findOne({ userId });
 
-      if (!user) {
-        throw 'Ошибка при обновлении токена пользователя';
+      if (hasUser) {
+        await getRepository(Tokens).update({ userId }, { refresh });
+      } else {
+        const tokens = new Tokens();
+        await getRepository(Tokens).save(Object.assign(tokens, body));
       }
-
-      user.refresh = refresh;
-      const updateUser = await getRepository(Tokens).save(user);
-
-      return updateUser;
-    } catch (error) {
-      throw error;
+    } catch (err) {
+      throw errorTypeMessage('critical', err);
     }
+  }
+
+  public static async get(userId: number): Promise<IToken | Error | undefined> {
+    const response = await getRepository(Tokens)
+      .findOne({ userId })
+      .then((result: IToken | undefined): IToken | undefined => result)
+      .catch((error: Error): Error => error);
+
+    return response;
   }
 }

@@ -16,6 +16,7 @@ describe('Авторизация', () => {
     expect(user).toHaveProperty('id');
     expect(user).toHaveProperty('access_token');
     expect(user).toHaveProperty('refresh_token');
+    expect(user).toHaveProperty('expire');
   });
 
   it('При несуществующем login получаем 403, и сообщение об ошибке', async () => {

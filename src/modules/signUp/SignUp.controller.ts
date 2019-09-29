@@ -97,8 +97,8 @@ export default class SignUpController implements ISignUpController {
 
     this.tokens.access = jwt.sign(access, CONFIG.secret, { expiresIn: CONFIG.expire_access });
     this.tokens.refresh = jwt.sign(refresh, CONFIG.secret, { expiresIn: CONFIG.expire_refresh });
-    const decode = jwt.decode(this.tokens.access, CONFIG.secret);
-    this.tokens.expire = decode ? decode.exp : 0;
+    const decoded: any = jwt.decode(this.tokens.access, CONFIG.secret);
+    this.tokens.expire = decoded ? decoded.exp : 0;
 
     try {
       TokenModel.save({ userId: this.user.id, refresh: this.tokens.refresh });

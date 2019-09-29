@@ -17,6 +17,7 @@ describe('Регистрация', () => {
     expect(user).toHaveProperty('id');
     expect(user).toHaveProperty('access_token');
     expect(user).toHaveProperty('refresh_token');
+    expect(user).toHaveProperty('expire');
   });
 
   it('С cуществующим login получаем 403, и сообщение об ошибке', async () => {

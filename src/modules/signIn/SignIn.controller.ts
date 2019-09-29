@@ -41,7 +41,7 @@ export default class SignInController implements ISignInController {
       this.checkValue();
       await this.getUser();
       this.checkPassword();
-      this.createTokens();
+      await this.createTokens();
       this.send(res);
     } catch (error) {
       const code = error.type === 'not_access' ? 403 : 500;
@@ -86,20 +86,16 @@ export default class SignInController implements ISignInController {
     }
   }
 
-  private createTokens(): void {
+  private async createTokens(): Promise<void> {
     const access = { id: this.user.id };
     const refresh = { id: this.user.id, key: randomstring.generate() };
 
     this.tokens.access = jwt.sign(access, CONFIG.secret, { expiresIn: CONFIG.expire_access });
     this.tokens.refresh = jwt.sign(refresh, CONFIG.secret, { expiresIn: CONFIG.expire_refresh });
-    const decode = jwt.decode(this.tokens.access, CONFIG.secret);
-    this.tokens.expire = decode ? decode.exp : 0;
+    const decoded: any = jwt.decode(this.tokens.access, CONFIG.secret);
+    this.tokens.expire = decoded ? decoded.exp : 0;
 
-    try {
-      TokenModel.save({ userId: this.user.id, refresh: this.tokens.refresh });
-    } catch (error) {
-      throw errorTypeMessage('critical', error);
-    }
+    await TokenModel.save({ userId: this.user.id, refresh: this.tokens.refresh });
   }
 
   private send(res: Response): void {
