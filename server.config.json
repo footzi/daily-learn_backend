@@ -7,15 +7,15 @@
     "type": "mysql",
     "host": "eu-cdbr-west-02.cleardb.net",
     "port": 3306,
-    "username": "b6b5e639fc8877",
-    "password": "de373839",
-    "database": "heroku_db68cdcc3e73c09",
+    "username": "b762c0e5b1919d",
+    "password": "039786a4",
+    "database": "heroku_311563abd958ad8",
     "synchronize": true,
     "entities": [
       "./src/entities/*.ts"
     ]
   },
   "secret": "jwt-secret",
-  "expire_access": "30d",
+  "expire_access": "0.5h",
   "expire_refresh": "30d"
 }

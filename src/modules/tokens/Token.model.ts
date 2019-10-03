@@ -1,7 +1,8 @@
 import { getRepository } from 'typeorm';
 import Tokens from '../../entities/Tokens';
 import { IToken } from './i-tokens';
-import { errorTypeMessage } from '../../utils';
+import { errorTypeMessage } from '../../utils/errorHandler';
+import { E } from '../../constans';
 
 export default class TokenModel {
   public static async save(body: IToken): Promise<void | Error> {
@@ -17,7 +18,7 @@ export default class TokenModel {
         await getRepository(Tokens).save(Object.assign(tokens, body));
       }
     } catch (err) {
-      throw errorTypeMessage('critical', err);
+      throw errorTypeMessage(E.critical, err);
     }
   }
 

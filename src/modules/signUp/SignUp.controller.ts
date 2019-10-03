@@ -5,8 +5,10 @@ import randomstring from 'randomstring';
 import SingUpModel from './SignUp.model';
 import User from '../../entities/User';
 import TokenModel from '../tokens/Token.model';
-import { checkTypeValue, errorMessage, errorTypeMessage, sendData } from '../../utils';
+import { checkTypeValue, sendData } from '../../utils';
+import { typesError, errorMessage, errorTypeMessage } from '../../utils/errorHandler';
 import { ISignUpController } from './i-signup';
+import { E } from '../../constans';
 
 const CONFIG = require('../../../server.config.json');
 
@@ -42,10 +44,10 @@ export default class SignUpController implements ISignUpController {
       this.checkValue();
       await this.hasUser();
       await this.saveUser();
-      this.createTokens();
+      await this.createTokens();
       this.send(res);
     } catch (error) {
-      const code = error.type === 'not_access' ? 403 : 500;
+      const code = typesError[error.type];
       const data = sendData('', errorMessage(error.content));
 
       res.status(code).send(data);
@@ -58,7 +60,7 @@ export default class SignUpController implements ISignUpController {
     const isValidPassword = checkTypeValue(password, 'string');
 
     if (!isValidLogin || !isValidPassword) {
-      throw errorTypeMessage('not_access', 'Oт клиента получены неверные данные');
+      throw errorTypeMessage(E.invalid_data, 'Oт клиента получены неверные данные');
     }
   }
 
@@ -69,10 +71,10 @@ export default class SignUpController implements ISignUpController {
       const hasUser = await SingUpModel.hasUser(login);
 
       if (hasUser) {
-        throw errorTypeMessage('not_access', 'Данный пользователь уже существует');
+        throw errorTypeMessage(E.invalid_data, 'Данный пользователь уже существует');
       }
     } catch (error) {
-      throw errorTypeMessage('critical', error);
+      throw errorTypeMessage(E.critical, error);
     }
   }
 
@@ -87,11 +89,11 @@ export default class SignUpController implements ISignUpController {
         this.user.id = user.id;
       }
     } catch (error) {
-      throw errorTypeMessage('critical', error);
+      throw errorTypeMessage(E.critical, error);
     }
   }
 
-  private createTokens(): void {
+  private async createTokens(): Promise<void> {
     const access = { id: this.user.id };
     const refresh = { id: this.user.id, key: randomstring.generate() };
 
@@ -101,9 +103,9 @@ export default class SignUpController implements ISignUpController {
     this.tokens.expire = decoded ? decoded.exp : 0;
 
     try {
-      TokenModel.save({ userId: this.user.id, refresh: this.tokens.refresh });
+      await TokenModel.save({ userId: this.user.id, refresh: this.tokens.refresh });
     } catch (error) {
-      throw errorTypeMessage('critical', error);
+      throw errorTypeMessage(E.critical, error);
     }
   }
 

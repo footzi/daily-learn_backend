@@ -6,7 +6,9 @@ import SignInModel from './SignIn.model';
 import TokenModel from '../tokens/Token.model';
 import User from '../../entities/User';
 import { ISignInController } from './i-signin';
-import { checkTypeValue, errorMessage, errorTypeMessage, sendData } from '../../utils';
+import { checkTypeValue, sendData } from '../../utils';
+import { typesError, errorMessage, errorTypeMessage } from '../../utils/errorHandler';
+import { E } from '../../constans';
 
 const CONFIG = require('../../../server.config.json');
 
@@ -44,7 +46,7 @@ export default class SignInController implements ISignInController {
       await this.createTokens();
       this.send(res);
     } catch (error) {
-      const code = error.type === 'not_access' ? 403 : 500;
+      const code = typesError[error.type];
       const data = sendData('', errorMessage(error.content));
 
       res.status(code).send(data);
@@ -57,24 +59,24 @@ export default class SignInController implements ISignInController {
     const isValidPassword = checkTypeValue(password, 'string');
 
     if (!isValidLogin || !isValidPassword) {
-      throw errorTypeMessage('not_access', 'Oт клиента получены неверные данные');
+      throw errorTypeMessage(E.invalid_data, 'Oт клиента получены неверные данные');
     }
   }
 
   private async getUser(): Promise<void> {
     try {
-      const user = await SignInModel.signIn(this.body.login);
+      const user = await SignInModel.getUser(this.body.login);
 
       if (user && user instanceof User) {
         this.user.id = user.id;
         this.user.password = user.password;
       }
     } catch (error) {
-      throw errorTypeMessage('critical', error);
+      throw errorTypeMessage(E.critical, error);
     }
 
     if (!this.user.id && !this.user.password) {
-      throw errorTypeMessage('not_access', 'Данного пользователя не существует');
+      throw errorTypeMessage(E.invalid_data, 'Данного пользователя не существует');
     }
   }
 
@@ -82,7 +84,7 @@ export default class SignInController implements ISignInController {
     const checkPassword = bcrypt.compareSync(this.body.password, this.user.password);
 
     if (!checkPassword) {
-      throw errorTypeMessage('not_access', 'Неверный пароль');
+      throw errorTypeMessage(E.not_access, 'Неверный пароль');
     }
   }
 

@@ -4,6 +4,6 @@ export default class HomeController {
   // @ts-ignore
   getData(req: Request, res: Response,) {
     // @ts-ignore
-    res.send('home contrtoller', res.locals.userId);
+    return res.status(200).send('home contrtoller');
   }
 }

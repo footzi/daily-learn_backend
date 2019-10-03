@@ -6,9 +6,13 @@ let connection = '';
 jest.setTimeout(30000);
 
 beforeAll(async () => {
-  connection = await createConnection(database);
+  if (!connection) {
+    connection = await createConnection(database);
+  }
 });
 
 afterAll(async () => {
-  connection.close();
+  if (connection) {
+    await connection.close();
+  }
 });

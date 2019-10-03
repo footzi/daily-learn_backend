@@ -1,4 +1,4 @@
-import { Column, PrimaryGeneratedColumn, Entity } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 export default class Tokens {
@@ -6,6 +6,8 @@ export default class Tokens {
     this.id = 0;
     this.userId = 0;
     this.refresh = '';
+    this.createDate = '';
+    this.updateDate = '';
   }
 
   @PrimaryGeneratedColumn()
@@ -16,4 +18,10 @@ export default class Tokens {
 
   @Column()
   refresh: string;
+
+  @CreateDateColumn()
+  createDate: string;
+
+  @UpdateDateColumn()
+  updateDate: string;
 }

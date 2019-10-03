@@ -3,8 +3,10 @@ import jwt from 'jsonwebtoken';
 import randomstring from 'randomstring';
 import TokenModel from './Token.model';
 import Tokens from '../../entities/Tokens';
-import { errorMessage, errorTypeMessage, parseBearer, sendData } from '../../utils';
+import { parseBearer, sendData } from '../../utils';
 import { ITokensController } from './i-tokens';
+import { typesError, errorMessage, errorTypeMessage } from '../../utils/errorHandler';
+import { E } from '../../constans';
 
 const CONFIG = require('../../../server.config.json');
 
@@ -48,7 +50,7 @@ export default class RefreshController implements ITokensController {
       } else {
         const data = sendData('', errorMessage(new Error(err.message)));
 
-        res.status(403).send(data);
+        res.status(401).send(data);
       }
     });
   }
@@ -56,13 +58,13 @@ export default class RefreshController implements ITokensController {
   public async refresh(req: Request, res: Response): Promise<void> {
     try {
       this.getToken(req.headers.authorization);
-      this.checkToken();
+      this.getUserId();
       await this.getUser();
       this.compareTokens();
       await this.createTokens();
       this.send(res);
     } catch (error) {
-      const code = error.type === 'not_access' ? 403 : 500;
+      const code = typesError[error.type];
       const data = sendData('', errorMessage(error.content));
 
       res.status(code).send(data);
@@ -73,21 +75,21 @@ export default class RefreshController implements ITokensController {
     if (header) {
       this.refresh_token = parseBearer(header);
     } else {
-      throw errorTypeMessage('not_access', 'Токен не получен');
+      throw errorTypeMessage(E.invalid_data, 'Токен не получен');
     }
   }
 
-  checkToken(): void {
+  getUserId(): void {
     try {
       const decoded: any = jwt.verify(this.refresh_token, CONFIG.secret);
 
       if (typeof decoded === 'object') {
         this.decoded.id = decoded.id;
       } else {
-        throw errorTypeMessage('not_access', 'Ошибка чтения токена');
+        throw errorTypeMessage(E.not_access, 'Ошибка чтения токена');
       }
     } catch (err) {
-      throw errorTypeMessage('not_access', err.message);
+      throw errorTypeMessage(E.not_access, err.message);
     }
   }
 
@@ -100,11 +102,11 @@ export default class RefreshController implements ITokensController {
         this.user.refresh = response.refresh;
       }
     } catch (error) {
-      throw errorTypeMessage('critical', error);
+      throw errorTypeMessage(E.critical, error);
     }
 
     if (!this.user) {
-      throw errorTypeMessage('not_access', 'Для данного пользователя отказано в доступе');
+      throw errorTypeMessage(E.not_access, 'Для данного пользователя отказано в доступе');
     }
   }
 
@@ -112,7 +114,7 @@ export default class RefreshController implements ITokensController {
     const db_token = this.user.refresh;
 
     if (JSON.stringify(db_token) !== JSON.stringify(this.refresh_token)) {
-      throw errorTypeMessage('not_access', 'Токены не совпадают');
+      throw errorTypeMessage(E.not_access, 'Токены не совпадают');
     }
   }
 

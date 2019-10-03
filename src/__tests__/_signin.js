@@ -32,7 +32,7 @@ describe('Авторизация', () => {
     expect(error).toHaveProperty('stack');
   });
 
-  it('При неверном пароле получаем 403, и сообщение об ошибке', async () => {
+  it('При неверном пароле получаем 401, и сообщение об ошибке', async () => {
     const result = await request(app)
       .post('/api/signin')
       .field('login', mockUser.login)
@@ -40,7 +40,7 @@ describe('Авторизация', () => {
 
     const { error } = JSON.parse(result.error.text);
 
-    expect(result.statusCode).toEqual(403);
+    expect(result.statusCode).toEqual(401);
     expect(error).toHaveProperty('message');
     expect(error).toHaveProperty('stack');
   });
