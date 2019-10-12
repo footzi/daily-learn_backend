@@ -34,7 +34,6 @@ export default class DictionaryController {
       const dictionaries = await DictionaryModel.getAll({ userId });
 
       res.send(sendData({ dictionaries }));
-
     } catch (error) {
       const code = typesError[error.type];
       const data = sendData('', errorMessage(error.content));

@@ -1,11 +1,12 @@
 import { getRepository } from 'typeorm';
 import Dictionaries from '../../entities/Dictionaries';
-import { IDictionary } from './i-dictionary';
+import { IDictionary } from '../../entities/interfaces';
+import { ISaveDictionary, IHasDictionary, IGetAllDictionary } from './i-dictionary';
 import { errorTypeMessage } from '../../utils/errorHandler';
 import { E } from '../../constans';
 
 export default class DictionaryModel {
-  public static async has(body: IDictionary): Promise<boolean | Error> {
+  public static async has(body: IHasDictionary): Promise<boolean | Error> {
     const { userId, name } = body;
 
     const respone = await getRepository(Dictionaries)
@@ -16,7 +17,7 @@ export default class DictionaryModel {
     return respone;
   }
 
-  public static async save(body: IDictionary): Promise<void | Error> {
+  public static async save(body: ISaveDictionary): Promise<void | Error> {
     const dictionaries = new Dictionaries();
 
     try {
@@ -26,9 +27,20 @@ export default class DictionaryModel {
     }
   }
 
-  public static async getAll(userId: Number): Promise<Array<IDictionary> | Error> {
+  public static async getAll(body: IGetAllDictionary): Promise<Array<IDictionary> | Error> {
+    const { userId } = body;
+    // try {
+    //   const t = await getRepository(Dictionaries)
+    //     .createQueryBuilder('dictionaries')
+    //     .leftJoinAndSelect("dictionaries.words", "words.id")
+    //     .getMany();
+    //   return t;
+    // } catch (e) {
+    //   console.log(e);
+    // }
+
     const respone = await getRepository(Dictionaries)
-      .find({ userId })
+      .find({ where: { userId }, relations: ['words'] })
       .then((result: Array<IDictionary>): Array<IDictionary> => result)
       .catch((error: Error): Error => error);
 

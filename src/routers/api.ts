@@ -4,7 +4,8 @@ import TokenController from '../modules/tokens/Token.controller';
 import SignUpController from '../modules/signUp/SignUp.controller';
 import SignInController from '../modules/signIn/SignIn.controller';
 import SignOutController from '../modules/signOut/SignOut.controller';
-import DictionaryController from '../modules/dictionary/dictionary.controller';
+import DictionaryController from '../modules/dictionary/Dictionary.controller';
+import WordsController from '../modules/words/Words.controller';
 
 const router = Router();
 const upload: multer.Instance = multer();
@@ -22,9 +23,13 @@ router.post('/refresh', (req, res) => new TokenController().refresh(req, res));
 router.get('/dictionary/getAll', upload.none(), TokenController.check, (req, res) =>
   DictionaryController.getAll(req, res)
 );
-
 router.post('/dictionary/create', upload.none(), TokenController.check, (req, res) =>
   DictionaryController.create(req, res)
+);
+
+router.post('/words/create', upload.none(), TokenController.check, (req, res) => WordsController.create(req, res));
+router.post('/words/changeCount', upload.none(), TokenController.check, (req, res) =>
+  WordsController.changeCount(req, res)
 );
 
 export default router;

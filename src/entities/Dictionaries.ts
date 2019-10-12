@@ -1,4 +1,5 @@
-import { Column, PrimaryGeneratedColumn, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, Entity, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import Words from './Words';
 
 @Entity()
 export default class Dictionaries {
@@ -18,6 +19,10 @@ export default class Dictionaries {
 
   @Column()
   name: string;
+
+  @OneToMany(type => Words, words => words.dictionary)
+  // @ts-ignore
+  words: Words[];
 
   @CreateDateColumn()
   createDate: string;

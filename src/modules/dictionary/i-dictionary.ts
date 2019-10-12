@@ -1,20 +1,13 @@
-import { Request, Response } from 'express';
-
-// export interface ITokensController {
-//   refresh_token: string;
-//   decoded: {
-//     id: number;
-//   };
-//   user: { id: number; refresh: string };
-//   newtokens: {
-//     access: string;
-//     refresh: string;
-//     expire: number;
-//   };
-//   refresh(req: Request, res: Response): Promise<void>;
-// }
-
-export interface IDictionary {
+export interface ISaveDictionary {
   userId: number;
   name: string;
+}
+
+export interface IHasDictionary {
+  userId: number;
+  name: string;
+}
+
+export interface IGetAllDictionary {
+  userId: number;
 }

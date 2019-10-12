@@ -10,7 +10,7 @@ module.exports = {
     username: 'b762c0e5b1919d',
     password: '039786a4',
     database: 'heroku_311563abd958ad8',
-    synchronize: true,
+    synchronize: false,
     entities: ['./build/entities/*.js']
   },
   secret: 'jwt-secret',
