@@ -66,15 +66,16 @@ export default class SignUpController implements ISignUpController {
 
   private async hasUser(): Promise<void> {
     const { login } = this.body;
+    let hasUser;
 
     try {
-      const hasUser = await SingUpModel.hasUser(login);
-
-      if (hasUser) {
-        throw errorTypeMessage(E.invalid_data, 'Данный пользователь уже существует');
-      }
+      hasUser = await SingUpModel.hasUser(login);
     } catch (error) {
       throw errorTypeMessage(E.critical, error);
+    }
+
+    if (hasUser) {
+      throw errorTypeMessage(E.invalid_data, 'Данный пользователь уже существует');
     }
   }
 

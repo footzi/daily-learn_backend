@@ -4,10 +4,11 @@ import SignOutModel from './signOut.model';
 import { parseBearer, sendData } from '../../utils';
 import { typesError, errorMessage, errorTypeMessage } from '../../utils/errorHandler';
 import { E } from '../../constans';
+import { ISignOutController } from './i-signout';
 
 const CONFIG = require('../../../server.config.json');
 
-export default class SignOutController {
+export default class SignOutController implements ISignOutController {
   access_token: string;
 
   decoded: { id: number };
