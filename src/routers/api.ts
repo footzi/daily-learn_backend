@@ -3,7 +3,7 @@ import multer from 'multer';
 import TokenController from '../modules/tokens/Token.controller';
 import SignUpController from '../modules/signUp/SignUp.controller';
 import SignInController from '../modules/signIn/SignIn.controller';
-import SignOutController from '../modules/signOut/SignOut.controller';
+import SignOutController from '../modules/signOut/signOut.controller';
 import DictionaryController from '../modules/dictionary/Dictionary.controller';
 import WordsController from '../modules/words/Words.controller';
 
