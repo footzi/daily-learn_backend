@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import DictionaryModel from '../test/test.model';
+import DictionaryModel from '../dictionary/Dictionary.model';
 import { IDictionary, IWord } from '../../entities/interfaces';
 import { sendData } from '../../utils';
 import { typesError, errorMessage, errorTypeMessage } from '../../utils/errorHandler';
