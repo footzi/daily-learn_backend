@@ -13,6 +13,10 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.get('/', (req, res) => {
+  res.status(200);
+  res.send('hello');
+});
 app.use('/api', cors({ credentials: true, origin: `http://localhost:3000` }), api);
 app.use('/screens', cors({ credentials: true, origin: `http://localhost:3000` }), screens);
 

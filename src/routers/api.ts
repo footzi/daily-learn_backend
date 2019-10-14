@@ -10,11 +10,6 @@ import WordsController from '../modules/words/Words.controller';
 const router = Router();
 const upload: multer.Instance = multer();
 
-router.get('/test', (req, res) => {
-  res.status(200);
-  res.send('hello');
-});
-
 router.post('/signup', upload.none(), (req, res) => new SignUpController().signUp(req, res));
 router.post('/signin', upload.none(), (req, res) => new SignInController().signIn(req, res));
 router.post('/signout', upload.none(), (req, res) => new SignOutController().signOut(req, res));
