@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import DictionaryModel from './Dictionary.model';
+import DictionaryModel from './test.model';
 import { sendData } from '../../utils';
 import { typesError, errorMessage, errorTypeMessage } from '../../utils/errorHandler';
 import { E } from '../../constans';
