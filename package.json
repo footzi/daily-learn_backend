@@ -4,7 +4,7 @@
   "description": "",
   "main": "./build/index.js",
   "scripts": {
-    "postinstall": "npm run env-prod && tsc --build",
+    "postinstall": "tsc --build",
     "start": "npm run env-prod && node ./build/index.js",
     "dev": "npm run env-dev && ts-node-dev --respawn --transpileOnly  ./src/index.ts",
     "dev-test": "npm run env-test && ts-node-dev --respawn --transpileOnly  ./src/index.ts",
