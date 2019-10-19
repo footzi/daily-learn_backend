@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import DictionaryModel from './Dictionary.model';
-import { sendData } from '../../utils';
+import { sendData, checkTypeValue } from '../../utils';
 import { typesError, errorMessage, errorTypeMessage } from '../../utils/errorHandler';
 import { E } from '../../constans';
 
@@ -10,6 +10,12 @@ export default class DictionaryController {
     const { name } = req.body;
 
     try {
+      const isValidName = checkTypeValue(name, 'string');
+  
+      if (!isValidName) {
+        throw errorTypeMessage(E.invalid_data, 'Oт клиента получены неверные данные');
+      }
+
       const hasDictionary = await DictionaryModel.has({ userId, name });
 
       if (!hasDictionary) {

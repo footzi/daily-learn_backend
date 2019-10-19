@@ -1,6 +1,6 @@
 export default {
   id: 1,
-  login: 'testik',
+  login: 'test',
   password: 'test',
   surname: 'test@test.com',
   expire: 1572363211,

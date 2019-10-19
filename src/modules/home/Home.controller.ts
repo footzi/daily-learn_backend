@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import DictionaryModel from '../dictionary/Dictionary.model';
+import IrreguralVerbsModel from '../irregular-verbs/irregular-verbs.model';
 import { IDictionary, IWord } from '../../entities/interfaces';
 import { sendData } from '../../utils';
 import { typesError, errorMessage, errorTypeMessage } from '../../utils/errorHandler';
@@ -25,6 +26,11 @@ export default class HomeController {
     try {
       await this.getDictionaties();
       this.normailizeDictionaties();
+
+
+      IrreguralVerbsModel.getAll({ userId: this.userId });
+
+
       this.send(res);
     } catch (error) {
       const code = typesError[error.type];

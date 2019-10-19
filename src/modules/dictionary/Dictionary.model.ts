@@ -29,15 +29,6 @@ export default class DictionaryModel {
 
   public static async getAll(body: IGetAllDictionary): Promise<Array<IDictionary> | Error> {
     const { userId } = body;
-    // try {
-    //   const t = await getRepository(Dictionaries)
-    //     .createQueryBuilder('dictionaries')
-    //     .leftJoinAndSelect("dictionaries.words", "words.id")
-    //     .getMany();
-    //   return t;
-    // } catch (e) {
-    //   console.log(e);
-    // }
 
     const respone = await getRepository(Dictionaries)
       .find({ where: { userId }, relations: ['words'] })
