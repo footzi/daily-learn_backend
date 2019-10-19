@@ -1,23 +1,30 @@
 import { Request, Response } from 'express';
 import DictionaryModel from '../dictionary/Dictionary.model';
 import IrreguralVerbsModel from '../irregular-verbs/irregular-verbs.model';
-import { IDictionary, IWord } from '../../entities/interfaces';
+import { IDictionary, IIrregularVerbs } from '../../entities/interfaces';
 import { sendData } from '../../utils';
 import { typesError, errorMessage, errorTypeMessage } from '../../utils/errorHandler';
 import { E } from '../../constans';
-import { INormalizeDictionary, INormalizeWords } from './i-home';
+import { INormalizeDictionary } from './i-home';
+import { normailizeDictionaties } from './normalize';
 
 export default class HomeController {
   userId: number;
 
   dictionaries: Array<INormalizeDictionary>;
 
+  irreguralVerbs: Array<IIrregularVerbs>;
+
   bd_dictionaries: Array<IDictionary>;
+
+  bd_irreguralVerbs: Array<IIrregularVerbs>;
 
   constructor() {
     this.userId = 0;
     this.bd_dictionaries = [];
+    this.bd_irreguralVerbs = [];
     this.dictionaries = [];
+    this.irreguralVerbs = [];
   }
 
   public async getData(req: Request, res: Response): Promise<void> {
@@ -25,11 +32,10 @@ export default class HomeController {
 
     try {
       await this.getDictionaties();
-      this.normailizeDictionaties();
+      await this.getIrreguralVerbs();
 
-
-      IrreguralVerbsModel.getAll({ userId: this.userId });
-
+      this.dictionaries = normailizeDictionaties(this.bd_dictionaries);
+      this.irreguralVerbs = this.bd_irreguralVerbs;
 
       this.send(res);
     } catch (error) {
@@ -37,6 +43,18 @@ export default class HomeController {
       const data = sendData('', errorMessage(error.content));
 
       res.status(code).send(data);
+    }
+  }
+
+  private async getIrreguralVerbs(): Promise<void> {
+    try {
+      const verbs = await IrreguralVerbsModel.getAll({ userId: this.userId });
+
+      if (verbs instanceof Array) {
+        this.bd_irreguralVerbs = verbs;
+      }
+    } catch (error) {
+      throw errorTypeMessage(E.critical, error);
     }
   }
 
@@ -52,38 +70,8 @@ export default class HomeController {
     }
   }
 
-  private normailizeDictionaties(): void {
-    const normalizeWords = (words: Array<IWord>): Array<INormalizeWords> => {
-      return words.map(item => {
-        const { id, en, ru, en_count, ru_count } = item;
-        return {
-          id,
-          en: {
-            name: en,
-            count: en_count
-          },
-          ru: {
-            name: ru,
-            count: ru_count
-          }
-        };
-      });
-    };
-
-    this.dictionaries = this.bd_dictionaries.map(
-      (item: IDictionary): INormalizeDictionary => {
-        const { id, name, words } = item;
-        return {
-          id,
-          name,
-          words: normalizeWords(words)
-        };
-      }
-    );
-  }
-
   private send(res: Response): void {
-    const data = sendData({ dictionaries: this.dictionaries });
+    const data = sendData({ dictionaries: this.dictionaries, irreguralVerbs: this.irreguralVerbs });
     res.send(data);
   }
 }

@@ -11,7 +11,7 @@ export default class DictionaryController {
 
     try {
       const isValidName = checkTypeValue(name, 'string');
-  
+
       if (!isValidName) {
         throw errorTypeMessage(E.invalid_data, 'Oт клиента получены неверные данные');
       }

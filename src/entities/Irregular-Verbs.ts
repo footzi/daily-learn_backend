@@ -26,7 +26,7 @@ export default class IrregularVerbs {
   @Column()
   translate: string;
 
-  @OneToMany(type => UserIrregularVerbs, user_words => user_words.verb)
+  @OneToMany(type => UserIrregularVerbs, user_count => user_count.verb)
   // @ts-ignore
-  user_words: UserIrregularVerbs[];
+  user_count: UserIrregularVerbs[];
 }

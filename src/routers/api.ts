@@ -6,6 +6,7 @@ import SignInController from '../modules/signIn/SignIn.controller';
 import SignOutController from '../modules/signOut/signOut.controller';
 import DictionaryController from '../modules/dictionary/Dictionary.controller';
 import WordsController from '../modules/words/Words.controller';
+import IrreguralVerbsController from '../modules/irregular-verbs/irregular-verbs.controller';
 
 const router = Router();
 const upload: multer.Instance = multer();
@@ -25,6 +26,10 @@ router.post('/dictionary/create', upload.none(), TokenController.check, (req, re
 router.post('/words/create', upload.none(), TokenController.check, (req, res) => WordsController.create(req, res));
 router.post('/words/changeCount', upload.none(), TokenController.check, (req, res) =>
   WordsController.changeCount(req, res)
+);
+
+router.post('/irregular-verbs/changeCount', upload.none(), TokenController.check, (req, res) =>
+  IrreguralVerbsController.changeCount(req, res)
 );
 
 export default router;

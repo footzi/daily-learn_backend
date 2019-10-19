@@ -6,10 +6,10 @@ export default class UserIrregularVerbs {
   constructor() {
     this.id = 0;
     this.userId = 0;
-    this.count_first = 0;
-    this.count_second = 0;
-    this.count_third = 0;
-    this.count_translate = 0;
+    this.first_count = 0;
+    this.second_count = 0;
+    this.third_count = 0;
+    this.translate_count = 0;
     // @ts-ignore
     this.verb = '';
   }
@@ -21,16 +21,16 @@ export default class UserIrregularVerbs {
   userId: number;
 
   @Column()
-  count_first: number;
+  first_count: number;
 
   @Column()
-  count_second: number;
+  second_count: number;
 
   @Column()
-  count_third: number;
+  third_count: number;
 
   @Column()
-  count_translate: number;
+  translate_count: number;
 
   @ManyToOne(type => IrregularVerbs, verb => verb)
   verb: IrregularVerbs;
