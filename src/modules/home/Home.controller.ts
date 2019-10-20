@@ -71,7 +71,7 @@ export default class HomeController {
   }
 
   private send(res: Response): void {
-    const data = sendData({ dictionaries: this.dictionaries, irreguralVerbs: this.irreguralVerbs });
+    const data = sendData({ dictionaries: this.dictionaries, irregularVerbs: this.irreguralVerbs });
     res.send(data);
   }
 }
