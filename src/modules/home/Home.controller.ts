@@ -13,7 +13,7 @@ export default class HomeController {
 
   dictionaries: Array<INormalizeDictionary>;
 
-  irreguralVerbs: Array<IIrregularVerbs>;
+  // irreguralVerbs: Array<IIrregularVerbs>;
 
   bd_dictionaries: Array<IDictionary>;
 
@@ -24,7 +24,7 @@ export default class HomeController {
     this.bd_dictionaries = [];
     this.bd_irreguralVerbs = [];
     this.dictionaries = [];
-    this.irreguralVerbs = [];
+    // this.irreguralVerbs = [];
   }
 
   public async getData(req: Request, res: Response): Promise<void> {
@@ -32,10 +32,10 @@ export default class HomeController {
 
     try {
       await this.getDictionaties();
-      await this.getIrreguralVerbs();
+      // await this.getIrreguralVerbs();
 
       this.dictionaries = normailizeDictionaties(this.bd_dictionaries);
-      this.irreguralVerbs = this.bd_irreguralVerbs;
+      // this.irreguralVerbs = this.bd_irreguralVerbs;
 
       this.send(res);
     } catch (error) {
@@ -71,7 +71,7 @@ export default class HomeController {
   }
 
   private send(res: Response): void {
-    const data = sendData({ dictionaries: this.dictionaries, irregularVerbs: this.irreguralVerbs });
+    const data = sendData({ dictionaries: this.dictionaries });
     res.send(data);
   }
 }
