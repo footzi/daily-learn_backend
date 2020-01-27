@@ -33,7 +33,8 @@
 - `saveUser` - сохранение пользователя в таблице User
 
 ## Response
-- user - `id, access_token, refresh_token, expire`
+- user - `id`
+- tokens - `access_token, refresh_token, expire`
 
 ## Testing
 - При успехе получаем 200, id пользователя и токены
@@ -54,7 +55,8 @@
 - `getUser` - получение пользователя
 
 ## Response
-- user - `id, access_token, refresh_token, expire`
+- user - `id`
+- tokens - `access_token, refresh_token, expire`
 
 ## Testing
 - При успехе получаем 200, id и токены пользователя

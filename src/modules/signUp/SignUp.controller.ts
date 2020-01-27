@@ -112,12 +112,10 @@ export default class SignUpController implements ISignUpController {
 
   private send(res: Response): void {
     const user = {
-      id: this.user.id,
-      access_token: this.tokens.access,
-      refresh_token: this.tokens.refresh,
-      expire: this.tokens.expire
+      id: this.user.id
     };
-    const data = sendData({ user });
+    
+    const data = sendData({ user, tokens: this.tokens });
     res.send(data);
   }
 }
