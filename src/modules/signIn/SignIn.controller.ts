@@ -105,7 +105,13 @@ export default class SignInController implements ISignInController {
       id: this.user.id,
     };
 
-    const data = sendData({ user, tokens: this.tokens });
+    const tokens = {
+      access_token : this.tokens.access,
+      refresh_token: this.tokens.refresh,
+      expire: this.tokens.expire
+    }
+
+    const data = sendData({ user, tokens });
     res.send(data);
   }
 }
