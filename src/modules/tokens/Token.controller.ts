@@ -131,12 +131,12 @@ export default class RefreshController implements ITokensController {
   }
 
   send(res: Response): void {
-    const user = {
+    const tokens = {
       access_token: this.newtokens.access,
       refresh_token: this.newtokens.refresh,
       expire: this.newtokens.expire
     };
-    const data = sendData({ user });
+    const data = sendData({ tokens });
     res.send(data);
   }
 }
