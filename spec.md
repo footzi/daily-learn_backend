@@ -143,6 +143,7 @@
 ## Response
 - сreate
   - success - `true`
+  - id - `id` 
 - getall
   - dictionaries - `id, userId, name, words`
 

@@ -17,11 +17,13 @@ export default class DictionaryModel {
     return respone;
   }
 
-  public static async save(body: ISaveDictionary): Promise<void | Error> {
+  public static async save(body: ISaveDictionary): Promise<number | Error> {
     const dictionaries = new Dictionaries();
 
     try {
-      await getRepository(Dictionaries).save(Object.assign(dictionaries, body));
+      const result = await getRepository(Dictionaries).save(Object.assign(dictionaries, body));
+
+      return result.id
     } catch (err) {
       throw errorTypeMessage(E.critical, err);
     }

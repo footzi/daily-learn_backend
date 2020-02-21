@@ -19,9 +19,9 @@ export default class DictionaryController {
       const hasDictionary = await DictionaryModel.has({ userId, name });
 
       if (!hasDictionary) {
-        await DictionaryModel.save({ userId, name });
+        const id = await DictionaryModel.save({ userId, name });
 
-        res.send(sendData({ success: true }));
+        res.send(sendData({ success: true, id }));
       } else {
         throw errorTypeMessage(E.invalid_data, 'Словарь с таким именем уже существует');
       }
