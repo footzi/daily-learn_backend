@@ -52,4 +52,28 @@ export default class WordsController {
       res.status(code).send(data);
     }
   }
+
+  public static async delete(req: Request, res: Response): Promise<void> {
+    const { ids } = req.body;
+
+    try {
+      const isValid = checkTypeValue(ids, 'string');
+
+      if (!isValid) {
+        throw errorTypeMessage(E.invalid_data, 'Oт клиента получены неверные данные');
+      }
+
+      //const ids_number = [ids].map(item => console.log(item));
+
+      const ids_number = ids.split(',').map(item => Number(item));
+      console.log(ids_number);
+
+      await WordsModel.delete(ids_number);
+    } catch (error) {
+      const code = typesError[error.type];
+      const data = sendData('', errorMessage(error.content));
+
+      res.status(code).send(data);
+    }
+  }
 }

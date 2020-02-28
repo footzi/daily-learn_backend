@@ -23,7 +23,7 @@ export default class DictionaryModel {
     try {
       const result = await getRepository(Dictionaries).save(Object.assign(dictionaries, body));
 
-      return result.id
+      return result.id;
     } catch (err) {
       throw errorTypeMessage(E.critical, err);
     }

@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 import Words from '../../entities/Words';
-import { ISaveWords, IUpdateWords } from './i-words';
+import { ISaveWords, IUpdateWords, IDeleteWords } from './i-words';
 import { errorTypeMessage } from '../../utils/errorHandler';
 import { E } from '../../constans';
 
@@ -21,6 +21,15 @@ export default class WordsModel {
 
     try {
       await getRepository(Words).update({ id: words_id }, { [field_name]: () => `${field_name} + 1` });
+    } catch (err) {
+      throw errorTypeMessage(E.critical, err);
+    }
+  }
+
+  public static async delete(ids: number[]): Promise<void | Error> {
+
+    try {
+      await getRepository(Words).delete(ids);
     } catch (err) {
       throw errorTypeMessage(E.critical, err);
     }

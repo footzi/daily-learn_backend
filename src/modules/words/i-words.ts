@@ -10,3 +10,7 @@ export interface IUpdateWords {
   words_id: number;
   lang: string;
 }
+
+export type IDeleteWords {
+  number[]
+}

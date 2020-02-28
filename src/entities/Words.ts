@@ -7,7 +7,7 @@ export default class Words {
     this.id = 0;
     // @ts-ignore
     this.dictionary = '';
-    this.ru = '';
+    this.ru = [];
     this.en = '';
     this.en_count = 0;
     this.ru_count = 0;
@@ -18,8 +18,8 @@ export default class Words {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  ru: string;
+  @Column('simple-array')
+  ru: string[];
 
   @Column()
   en: string;

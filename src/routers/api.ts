@@ -27,6 +27,7 @@ router.post('/words/create', upload.none(), TokenController.check, (req, res) =>
 router.post('/words/changeCount', upload.none(), TokenController.check, (req, res) =>
   WordsController.changeCount(req, res)
 );
+router.delete('/words/delete', upload.none(), TokenController.check, (req, res) => WordsController.delete(req, res));
 
 router.post('/irregular-verbs/changeCount', upload.none(), TokenController.check, (req, res) =>
   IrreguralVerbsController.changeCount(req, res)
