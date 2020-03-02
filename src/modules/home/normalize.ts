@@ -30,5 +30,3 @@ export const normailizeDictionaties = (dictionaries: Array<IDictionary>): Array<
     }
   );
 };
-
-export const t = () => {};

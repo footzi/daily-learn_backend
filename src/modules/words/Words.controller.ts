@@ -63,10 +63,7 @@ export default class WordsController {
         throw errorTypeMessage(E.invalid_data, 'Oт клиента получены неверные данные');
       }
 
-      //const ids_number = [ids].map(item => console.log(item));
-
-      const ids_number = ids.split(',').map(item => Number(item));
-      console.log(ids_number);
+      const ids_number = ids.split(',').map((item: string) => Number(item));
 
       await WordsModel.delete(ids_number);
     } catch (error) {

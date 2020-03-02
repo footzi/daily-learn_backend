@@ -30,7 +30,7 @@ export default class Words {
   @Column()
   ru_count: number;
 
-  @ManyToOne(type => Dictionaries, dictionary => dictionary)
+  @ManyToOne(type => Dictionaries, dictionary => dictionary, { onDelete: 'CASCADE' })
   dictionary: Dictionaries;
 
   @CreateDateColumn()

@@ -47,4 +47,25 @@ export default class DictionaryController {
       res.status(code).send(data);
     }
   }
+
+  public static async delete(req: Request, res: Response): Promise<void> {
+    const { id } = req.body;
+
+    try {
+      const isValid = checkTypeValue(id, 'string');
+
+      if (!isValid) {
+        throw errorTypeMessage(E.invalid_data, 'Oт клиента получены неверные данные');
+      }
+
+      await DictionaryModel.delete(Number(id));
+
+      res.send(sendData({ success: true }));
+    } catch (error) {
+      const code = typesError[error.type];
+      const data = sendData('', errorMessage(error.content));
+
+      res.status(code).send(data);
+    }
+  }
 }
