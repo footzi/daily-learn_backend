@@ -20,7 +20,7 @@ export default class Dictionaries {
   @Column()
   name: string;
 
-  @OneToMany(type => Words, words => words.dictionary)
+  @OneToMany(type => Words, words => words.dictionary, { onDelete: 'CASCADE' })
   // @ts-ignore
   words: Words[];
 

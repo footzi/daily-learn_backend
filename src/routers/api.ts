@@ -22,6 +22,9 @@ router.get('/dictionary/getAll', upload.none(), TokenController.check, (req, res
 router.post('/dictionary/create', upload.none(), TokenController.check, (req, res) =>
   DictionaryController.create(req, res)
 );
+router.delete('/dictionary/delete', upload.none(), TokenController.check, (req, res) =>
+  DictionaryController.delete(req, res)
+);
 
 router.post('/words/create', upload.none(), TokenController.check, (req, res) => WordsController.create(req, res));
 router.post('/words/changeCount', upload.none(), TokenController.check, (req, res) =>
