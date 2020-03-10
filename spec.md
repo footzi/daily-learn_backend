@@ -157,6 +157,7 @@
 ## Request
 `/api/words/create` - `ru`, `en`, `dictionary_id` - создание слова
 `/api/words/changeCount` - `words_id, lang` - изменение счетчика для слова
+`/api/words/delete` - `ids` - удаление слов
 
 ## Controller
 - сreate
@@ -171,7 +172,10 @@
 ## Response
 - сreate
   - success - `true`
+  - id - `id` 
 - changeCount
+  - success - `true`
+- delete
   - success - `true`
 
 ## Testing

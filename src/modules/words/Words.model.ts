@@ -5,11 +5,13 @@ import { errorTypeMessage } from '../../utils/errorHandler';
 import { E } from '../../constans';
 
 export default class WordsModel {
-  public static async save(body: ISaveWords): Promise<void | Error> {
+  public static async save(body: ISaveWords): Promise<number | Error> {
     const words = new Words();
 
     try {
-      await getRepository(Words).save(Object.assign(words, body));
+      const result = await getRepository(Words).save(Object.assign(words, body));
+
+      return result.id;
     } catch (err) {
       throw errorTypeMessage(E.critical, err);
     }
