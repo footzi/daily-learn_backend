@@ -20,9 +20,9 @@ export default class WordsController {
         throw errorTypeMessage(E.invalid_data, 'Oт клиента получены неверные данные');
       }
 
-      await WordsModel.save({ en, ru, dictionary });
+      const id = await WordsModel.save({ en, ru, dictionary });
 
-      res.send(sendData({ success: true }));
+      res.send(sendData({ success: true, id }));
     } catch (error) {
       const code = typesError[error.type];
       const data = sendData('', errorMessage(error.content));
