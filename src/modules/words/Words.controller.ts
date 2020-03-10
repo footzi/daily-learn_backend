@@ -66,6 +66,8 @@ export default class WordsController {
       const ids_number = ids.split(',').map((item: string) => Number(item));
 
       await WordsModel.delete(ids_number);
+
+      res.send(sendData({ success: true }));
     } catch (error) {
       const code = typesError[error.type];
       const data = sendData('', errorMessage(error.content));
