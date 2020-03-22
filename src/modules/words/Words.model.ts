@@ -5,16 +5,50 @@ import { errorTypeMessage } from '../../utils/errorHandler';
 import { E } from '../../constans';
 
 export default class WordsModel {
-  public static async save(body: ISaveWords): Promise<number | Error> {
+  public static async getLastGroupId(): Promise<number | Error> {
     const words = new Words();
 
-    try {
-      const result = await getRepository(Words).save(Object.assign(words, body));
 
-      return result.id;
+    try {
+      const result = await getRepository(Words).findOne({
+        order: {
+          groupId: "DESC"
+        }
+      });
+
+      return Number(result ? result.groupId : 0);
     } catch (err) {
       throw errorTypeMessage(E.critical, err);
     }
+    //
+    // try {
+    //   const result = await getRepository(Words).save(Object.assign(words, body));
+    //
+    //   return result.id;
+    // } catch (err) {
+    //   throw errorTypeMessage(E.critical, err);
+    // }
+  }
+
+  public static async save(body: ISaveWords): Promise<number | Error> {
+    const words = new Words();
+
+
+    try {
+      const result = await getRepository(Words).save(body);
+
+      return result;
+    } catch (err) {
+      throw errorTypeMessage(E.critical, err);
+    }
+    //
+    // try {
+    //   const result = await getRepository(Words).save(Object.assign(words, body));
+    //
+    //   return result.id;
+    // } catch (err) {
+    //   throw errorTypeMessage(E.critical, err);
+    // }
   }
 
   public static async update(body: IUpdateWords): Promise<void | Error> {

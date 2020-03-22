@@ -7,10 +7,10 @@ export default class Words {
     this.id = 0;
     // @ts-ignore
     this.dictionary = '';
-    this.ru = [];
-    this.en = '';
-    this.en_count = 0;
-    this.ru_count = 0;
+    this.groupId = 0;
+    this.name = '';
+    this.translate = '';
+    this.count = 0;
     this.createDate = '';
     this.updateDate = '';
   }
@@ -18,17 +18,17 @@ export default class Words {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('simple-array')
-  ru: string[];
+  @Column()
+  groupId: number;
 
   @Column()
-  en: string;
+  name: string;
 
   @Column()
-  en_count: number;
+  translate: string;
 
   @Column()
-  ru_count: number;
+  count: number;
 
   @ManyToOne(type => Dictionaries, dictionary => dictionary, { onDelete: 'CASCADE' })
   dictionary: Dictionaries;
