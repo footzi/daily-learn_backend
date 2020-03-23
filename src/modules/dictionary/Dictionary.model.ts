@@ -1,6 +1,5 @@
 import { getRepository } from 'typeorm';
 import Dictionaries from '../../entities/Dictionaries';
-import { IDictionary } from '../../entities/interfaces';
 import { ISaveDictionary, IHasDictionary, IGetAllDictionary } from './i-dictionary';
 import { errorTypeMessage } from '../../utils/errorHandler';
 import { E } from '../../constans';
@@ -30,12 +29,11 @@ export default class DictionaryModel {
     }
   }
 
-  public static async getAll(body: IGetAllDictionary): Promise<Array<IDictionary> | Error> {
+  public static async getAll(body: IGetAllDictionary): Promise<Array<Dictionaries> | Error> {
     const { userId } = body;
 
     try {
-      // @ts-ignore
-      return await getRepository(Dictionaries).find({ where: { userId }, relations: ['words'] });
+      return await getRepository(Dictionaries).find({ where: { userId }, relations: ['words']});
     } catch (err) {
       throw errorTypeMessage(E.critical, err);
     }

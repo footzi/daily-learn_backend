@@ -1,12 +1,11 @@
-export interface ISaveWords {
-  ru: string;
-  en: string;
-  dictionary: {
-    id: number;
-  };
-}
+// export interface ISaveWords {
+//   name: string;
+//   translate: string;
+//   dictionary: number;
+//   groupId: number;
+//   count: 0;
+// }
 
 export interface IUpdateWords {
-  words_id: number;
-  lang: string;
+  id: number;
 }

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import WordsModel from './Words.model';
+import { ISaveWords } from './i-words';
 import { sendData, checkTypeValue } from '../../utils';
 import { typesError, errorMessage, errorTypeMessage } from '../../utils/errorHandler';
 import { E } from '../../constans';
@@ -7,75 +8,54 @@ import { E } from '../../constans';
 export default class WordsController {
   public static async create(req: Request, res: Response): Promise<void> {
     const { name, translate, dictionary_id } = req.body;
-    const dictionary = {
-      id: Number(dictionary_id)
-    };
-
-    // console.log(name);
-    // console.log(translate);
-    // console.log(typeof translate);
-    // console.log(typeof name);
-
-    // console.log(Number(Date.now()));
-    //
-
-    console.log(req.body);
 
     try {
-      const groudId = await WordsModel.getLastGroupId();
+      const isValidName = checkTypeValue(name, 'string');
+      const isValidTranslate = checkTypeValue(translate, 'string');
+      const isValidId = checkTypeValue(dictionary_id, 'string');
 
-      const data = translate.map((item, index) => {
-        const word = {};
-
-        word.name = name[index] ? name[index] : name[0];
-        word.translate = item;
-        word.dictionaryId = Number(dictionary_id);
-        word.groupId = groudId + 1;
-        word.count = 0;
-
-        return word
-      })
-
-      const id = await WordsModel.save(data);
-      console.log(id);
-    } catch (e) {
-      console.log(e);
-    }
-
-    //console.log(data);
-
-    // try {
-    //   const isValidEn = checkTypeValue(en, 'string');
-    //   const isValidRu = checkTypeValue(ru, 'string');
-    //   const isValidId = checkTypeValue(dictionary_id, 'string');
-    //
-    //   if (!isValidEn || !isValidRu || !isValidId) {
-    //     throw errorTypeMessage(E.invalid_data, 'Oт клиента получены неверные данные');
-    //   }
-    //
-    //   const id = await WordsModel.save({ en, ru, dictionary });
-    //
-    //   res.send(sendData({ success: true, id }));
-    // } catch (error) {
-    //   const code = typesError[error.type];
-    //   const data = sendData('', errorMessage(error.content));
-    //
-    //   res.status(code).send(data);
-    // }
-  }
-
-  public static async changeCount(req: Request, res: Response): Promise<void> {
-    const { words_id, lang } = req.body;
-
-    try {
-      const isValidId = checkTypeValue(words_id, 'string');
-      const isValidLang = checkTypeValue(lang, 'string');
-
-      if (!isValidId || !isValidLang) {
+      if (!isValidName || !isValidTranslate || !isValidId) {
         throw errorTypeMessage(E.invalid_data, 'Oт клиента получены неверные данные');
       }
 
-      await WordsModel.update({ words_id, lang });
+      const lastGroupId = await WordsModel.getLastGroupId();
+      const names = JSON.parse(name);
+      const translates = JSON.parse(translate);
+
+      const data = translates.map((item: string, index: number) => {
+        const word: ISaveWords = { name: '', translate: '', dictionary: 0, groupId: 0, count: 0 };
+
+        word.name = names[index] ? names[index] : names[0];
+        word.translate = item;
+        word.dictionary = Number(dictionary_id);
+        word.groupId = typeof lastGroupId === 'number' ? lastGroupId + 1 : 0;
+
+        return word;
+      });
+
+      const item = await WordsModel.save(data);
+      const groupId = Array.isArray(item) ? item[0].groupId : null;
+
+      res.send(sendData({ success: true, groupId }));
+    } catch (error) {
+      const code = typesError[error.type];
+      const data = sendData('', errorMessage(error.content));
+
+      res.status(code).send(data);
+    }
+  }
+
+  public static async changeCount(req: Request, res: Response): Promise<void> {
+    const { id } = req.body;
+
+    try {
+      const isValidId = checkTypeValue(id, 'string');
+
+      if (!isValidId) {
+        throw errorTypeMessage(E.invalid_data, 'Oт клиента получены неверные данные');
+      }
+
+      await WordsModel.update({ id });
 
       res.send(sendData({ success: true }));
     } catch (error) {
@@ -96,9 +76,7 @@ export default class WordsController {
         throw errorTypeMessage(E.invalid_data, 'Oт клиента получены неверные данные');
       }
 
-      const ids_number = ids.split(',').map((item: string) => Number(item));
-
-      await WordsModel.delete(ids_number);
+      await WordsModel.delete(JSON.parse(ids));
 
       res.send(sendData({ success: true }));
     } catch (error) {

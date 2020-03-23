@@ -10,14 +10,10 @@ export interface IHomeController {
 
 export interface INormalizeWords {
   id: number;
-  en: {
-    name: string;
-    count: number;
-  };
-  ru: {
-    name: string;
-    count: number;
-  };
+  name: string;
+  translate: string;
+  count: number;
+  groupId: number;
 }
 
 export interface INormalizeDictionary {
