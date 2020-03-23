@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 import User from '../../entities/User';
-import { IUser } from '../../entities/interfaces';
+import { IUser } from '../../interfaces';
 import { IRequestSingUp } from './i-signup';
 
 export default class SignUpModel {

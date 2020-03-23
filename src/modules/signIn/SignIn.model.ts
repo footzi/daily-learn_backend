@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 import User from '../../entities/User';
-import { IUser } from '../../entities/interfaces';
+import { IUser } from '../../interfaces';
 
 export default class SignInModel {
   public static async getUser(login: string): Promise<IUser | Error | undefined> {
