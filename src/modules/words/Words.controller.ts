@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import WordsModel from './Words.model';
-import { ISaveWords } from './i-words';
+import { ISaveWord } from '../../interfaces';
 import { sendData, checkTypeValue } from '../../utils';
 import { typesError, errorMessage, errorTypeMessage } from '../../utils/errorHandler';
 import { E } from '../../constans';
@@ -23,7 +23,7 @@ export default class WordsController {
       const translates = JSON.parse(translate);
 
       const data = translates.map((item: string, index: number) => {
-        const word: ISaveWords = { name: '', translate: '', dictionary: 0, groupId: 0, count: 0 };
+        const word: ISaveWord = { name: '', translate: '', dictionary: 0, groupId: 0, count: 0 };
 
         word.name = names[index] ? names[index] : names[0];
         word.translate = item;

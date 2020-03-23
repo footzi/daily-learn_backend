@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import DictionaryModel from '../dictionary/Dictionary.model';
 import IrreguralVerbsModel from '../irregular-verbs/irregular-verbs.model';
-import { IDictionary, IIrregularVerbs } from '../../entities/interfaces';
+import { IDictionary, IIrregularVerbs } from '../../interfaces';
 import { sendData } from '../../utils';
 import { typesError, errorMessage, errorTypeMessage } from '../../utils/errorHandler';
 import { E } from '../../constans';
@@ -57,6 +57,7 @@ export default class HomeController {
       const dictionaries = await DictionaryModel.getAll({ userId: this.userId });
 
       if (Array.isArray(dictionaries)) {
+        // @ts-ignore
         this.bd_dictionaries = dictionaries;
       }
     } catch (error) {

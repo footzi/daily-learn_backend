@@ -1,6 +1,6 @@
 {
   "port": 8080,
-  "host": "192.168.246.4",
+  "host": "0.0.0.0",
   "domain": "http://192.168.0.100:8080",
   "static": "C:\\projects\\pet_life",
   "database": {
@@ -10,12 +10,12 @@
     "username": "b762c0e5b1919d",
     "password": "039786a4",
     "database": "heroku_311563abd958ad8",
-    "synchronize": true,
+    "synchronize": false,
     "entities": [
-      "./src/entities/*.ts"
+      "./build/entities/*.js"
     ]
   },
   "secret": "jwt-secret",
-  "expire_access": "2h",
+  "expire_access": "0.5h",
   "expire_refresh": "30d"
 }

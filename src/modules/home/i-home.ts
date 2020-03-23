@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { IDictionary } from '../../entities/interfaces';
+import { IDictionary } from '../../interfaces';
 
 export interface IHomeController {
   userId: number;

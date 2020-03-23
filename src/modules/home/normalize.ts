@@ -1,5 +1,5 @@
 import { INormalizeDictionary, INormalizeWords } from './i-home';
-import { IDictionary, IWord } from '../../entities/interfaces';
+import { IDictionary, IWord } from '../../interfaces';
 
 export const normailizeDictionaries = (dictionaries: Array<IDictionary>): Array<INormalizeDictionary> => {
   const normalizeWords = (words: Array<IWord>): Array<INormalizeWords> => {

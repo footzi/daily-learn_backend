@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm';
 import IrregularVerbs from '../../entities/Irregular-Verbs';
 import UserIrregularVerbs from '../../entities/User_Irregular-Verbs';
-import { IIrregularVerbs, IUserIrregularVerbs } from '../../entities/interfaces';
+import { IIrregularVerbs, IUserIrregularVerbs } from '../../interfaces';
 import { IGetAllIrregular, IHasIrregular, ISaveIrregular, IUpdateIrregular } from './i-irregular';
 import { errorTypeMessage } from '../../utils/errorHandler';
 import { E } from '../../constans';
