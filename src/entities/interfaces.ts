@@ -7,10 +7,10 @@ export interface IUser {
 
 export interface IWord {
   id: number;
-  ru: string;
-  en: string;
-  en_count: number;
-  ru_count: number;
+  name: string;
+  translate: string;
+  count: number;
+  groupId: number;
 }
 
 export interface IDictionary {

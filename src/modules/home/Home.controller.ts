@@ -6,14 +6,12 @@ import { sendData } from '../../utils';
 import { typesError, errorMessage, errorTypeMessage } from '../../utils/errorHandler';
 import { E } from '../../constans';
 import { INormalizeDictionary } from './i-home';
-import { normailizeDictionaties } from './normalize';
+import { normailizeDictionaries } from './normalize';
 
 export default class HomeController {
   userId: number;
 
   dictionaries: Array<INormalizeDictionary>;
-
-  // irreguralVerbs: Array<IIrregularVerbs>;
 
   bd_dictionaries: Array<IDictionary>;
 
@@ -24,18 +22,14 @@ export default class HomeController {
     this.bd_dictionaries = [];
     this.bd_irreguralVerbs = [];
     this.dictionaries = [];
-    // this.irreguralVerbs = [];
   }
 
   public async getData(req: Request, res: Response): Promise<void> {
     this.userId = res.locals.userId;
 
     try {
-      await this.getDictionaties();
-      // await this.getIrreguralVerbs();
-
-      this.dictionaries = normailizeDictionaties(this.bd_dictionaries);
-      // this.irreguralVerbs = this.bd_irreguralVerbs;
+      await this.getDictionaries();
+      this.dictionaries = normailizeDictionaries(this.bd_dictionaries);
 
       this.send(res);
     } catch (error) {
@@ -58,11 +52,11 @@ export default class HomeController {
     }
   }
 
-  private async getDictionaties(): Promise<void> {
+  private async getDictionaries(): Promise<void> {
     try {
       const dictionaries = await DictionaryModel.getAll({ userId: this.userId });
 
-      if (dictionaries instanceof Array) {
+      if (Array.isArray(dictionaries)) {
         this.bd_dictionaries = dictionaries;
       }
     } catch (error) {

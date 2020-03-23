@@ -1,28 +1,42 @@
 import { Request, Response } from 'express';
 import WordsModel from './Words.model';
+import { ISaveWords } from './i-words';
 import { sendData, checkTypeValue } from '../../utils';
 import { typesError, errorMessage, errorTypeMessage } from '../../utils/errorHandler';
 import { E } from '../../constans';
 
 export default class WordsController {
   public static async create(req: Request, res: Response): Promise<void> {
-    const { en, ru, dictionary_id } = req.body;
-    const dictionary = {
-      id: Number(dictionary_id)
-    };
+    const { name, translate, dictionary_id } = req.body;
 
     try {
-      const isValidEn = checkTypeValue(en, 'string');
-      const isValidRu = checkTypeValue(ru, 'string');
+      const isValidName = checkTypeValue(name, 'string');
+      const isValidTranslate = checkTypeValue(translate, 'string');
       const isValidId = checkTypeValue(dictionary_id, 'string');
 
-      if (!isValidEn || !isValidRu || !isValidId) {
+      if (!isValidName || !isValidTranslate || !isValidId) {
         throw errorTypeMessage(E.invalid_data, 'Oт клиента получены неверные данные');
       }
 
-      const id = await WordsModel.save({ en, ru, dictionary });
+      const lastGroupId = await WordsModel.getLastGroupId();
+      const names = JSON.parse(name);
+      const translates = JSON.parse(translate);
 
-      res.send(sendData({ success: true, id }));
+      const data = translates.map((item: string, index: number) => {
+        const word: ISaveWords = { name: '', translate: '', dictionary: 0, groupId: 0, count: 0 };
+
+        word.name = names[index] ? names[index] : names[0];
+        word.translate = item;
+        word.dictionary = Number(dictionary_id);
+        word.groupId = typeof lastGroupId === 'number' ? lastGroupId + 1 : 0;
+
+        return word;
+      });
+
+      const item = await WordsModel.save(data);
+      const groupId = Array.isArray(item) ? item[0].groupId : null;
+
+      res.send(sendData({ success: true, groupId }));
     } catch (error) {
       const code = typesError[error.type];
       const data = sendData('', errorMessage(error.content));
@@ -32,17 +46,16 @@ export default class WordsController {
   }
 
   public static async changeCount(req: Request, res: Response): Promise<void> {
-    const { words_id, lang } = req.body;
+    const { id } = req.body;
 
     try {
-      const isValidId = checkTypeValue(words_id, 'string');
-      const isValidLang = checkTypeValue(lang, 'string');
+      const isValidId = checkTypeValue(id, 'string');
 
-      if (!isValidId || !isValidLang) {
+      if (!isValidId) {
         throw errorTypeMessage(E.invalid_data, 'Oт клиента получены неверные данные');
       }
 
-      await WordsModel.update({ words_id, lang });
+      await WordsModel.update({ id });
 
       res.send(sendData({ success: true }));
     } catch (error) {
@@ -63,9 +76,7 @@ export default class WordsController {
         throw errorTypeMessage(E.invalid_data, 'Oт клиента получены неверные данные');
       }
 
-      const ids_number = ids.split(',').map((item: string) => Number(item));
-
-      await WordsModel.delete(ids_number);
+      await WordsModel.delete(JSON.parse(ids));
 
       res.send(sendData({ success: true }));
     } catch (error) {
