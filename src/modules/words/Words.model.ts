@@ -28,10 +28,11 @@ export default class WordsModel {
   }
 
   public static async update(body: IUpdateWords): Promise<void | Error> {
-    const { id } = body;
+    const { id, type } = body;
+    const field_name = `${type}_count`;
 
     try {
-      await getRepository(Words).update({ id }, { count: () => `${'count'} + 1` });
+      await getRepository(Words).update({ id }, { [field_name]: () => `${field_name} + 1` });
     } catch (err) {
       throw errorTypeMessage(E.critical, err);
     }
