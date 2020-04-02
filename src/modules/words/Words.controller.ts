@@ -46,16 +46,17 @@ export default class WordsController {
   }
 
   public static async changeCount(req: Request, res: Response): Promise<void> {
-    const { id } = req.body;
+    const { id, type } = req.body;
 
     try {
       const isValidId = checkTypeValue(id, 'string');
+      const isValidType = checkTypeValue(type, 'string');
 
-      if (!isValidId) {
+      if (!isValidId || !isValidType) {
         throw errorTypeMessage(E.invalid_data, 'Oт клиента получены неверные данные');
       }
 
-      await WordsModel.update({ id });
+      await WordsModel.update({ id, type });
 
       res.send(sendData({ success: true }));
     } catch (error) {
