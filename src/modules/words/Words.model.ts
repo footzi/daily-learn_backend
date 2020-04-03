@@ -29,7 +29,7 @@ export default class WordsModel {
 
   public static async update(body: IUpdateWords): Promise<void | Error> {
     const { id, type } = body;
-    const field_name = `${type}_count`;
+    const field_name = `${type}Count`;
 
     try {
       await getRepository(Words).update({ id }, { [field_name]: () => `${field_name} + 1` });
