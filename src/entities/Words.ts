@@ -10,8 +10,8 @@ export default class Words {
     this.groupId = 0;
     this.name = '';
     this.translate = '';
-    this.name_count = 0;
-    this.translate_count = 0;
+    this.nameCount = 0;
+    this.translateCount = 0;
     this.createDate = '';
     this.updateDate = '';
   }
@@ -29,10 +29,10 @@ export default class Words {
   translate: string;
 
   @Column()
-  name_count: number;
+  nameCount: number;
 
   @Column()
-  translate_count: number;
+  translateCount: number;
 
   @ManyToOne(type => Dictionaries, dictionary => dictionary, { onDelete: 'CASCADE' })
   dictionary: Dictionaries;
