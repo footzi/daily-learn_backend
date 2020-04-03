@@ -9,7 +9,8 @@ export interface IWord {
   id: number;
   name: string;
   translate: string;
-  count: number;
+  nameCount: number;
+  translateCount: number;
   groupId: number;
   dictionaryId: number;
 }
@@ -17,7 +18,8 @@ export interface IWord {
 export interface ISaveWord {
   name: string;
   translate: string;
-  count: number;
+  nameCount: number;
+  translateCount: number;
   groupId: number;
   dictionary: number;
 }

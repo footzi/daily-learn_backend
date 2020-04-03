@@ -12,7 +12,8 @@ export interface INormalizeWords {
   id: number;
   name: string;
   translate: string;
-  count: number;
+  nameCount: number;
+  translateCount: number;
   groupId: number;
 }
 
