@@ -1,4 +1,4 @@
-import { Column, PrimaryGeneratedColumn, Entity, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, Entity, CreateDateColumn, UpdateDateColumn, Timestamp } from 'typeorm';
 
 @Entity()
 export default class User {
@@ -7,8 +7,8 @@ export default class User {
     this.login = '';
     this.email = '';
     this.password = '';
-    this.createDate = '';
-    this.updateDate = '';
+    this.createDate = new Date();
+    this.updateDate = new Date();
   }
 
   @PrimaryGeneratedColumn()
@@ -24,8 +24,8 @@ export default class User {
   password: string;
 
   @CreateDateColumn()
-  createDate: string;
+  createDate: Date;
 
   @UpdateDateColumn()
-  updateDate: string;
+  updateDate: Date;
 }

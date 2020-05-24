@@ -1,10 +1,8 @@
 import { Request, Response } from 'express';
 import DictionaryModel from '../dictionary/Dictionary.model';
-import IrreguralVerbsModel from '../irregular-verbs/irregular-verbs.model';
-import { IDictionary, IIrregularVerbs } from '../../interfaces';
+import { IDictionary } from '../../interfaces';
 import { sendData } from '../../utils';
-import { typesError, errorMessage, errorTypeMessage } from '../../utils/errorHandler';
-import { E } from '../../constans';
+import { typesError, errorMessage } from '../../utils/errorHandler';
 import { INormalizeDictionary } from './i-home';
 import { normailizeDictionaries } from './normalize';
 
@@ -15,12 +13,9 @@ export default class HomeController {
 
   bd_dictionaries: Array<IDictionary>;
 
-  bd_irreguralVerbs: Array<IIrregularVerbs>;
-
   constructor() {
     this.userId = 0;
     this.bd_dictionaries = [];
-    this.bd_irreguralVerbs = [];
     this.dictionaries = [];
   }
 
@@ -40,28 +35,12 @@ export default class HomeController {
     }
   }
 
-  private async getIrreguralVerbs(): Promise<void> {
-    try {
-      const verbs = await IrreguralVerbsModel.getAll({ userId: this.userId });
-
-      if (verbs instanceof Array) {
-        this.bd_irreguralVerbs = verbs;
-      }
-    } catch (error) {
-      throw errorTypeMessage(E.critical, error);
-    }
-  }
-
   private async getDictionaries(): Promise<void> {
-    try {
-      const dictionaries = await DictionaryModel.getAll({ userId: this.userId });
+    const dictionaries = await DictionaryModel.getAll({ userId: this.userId });
 
-      if (Array.isArray(dictionaries)) {
-        // @ts-ignore
-        this.bd_dictionaries = dictionaries;
-      }
-    } catch (error) {
-      throw errorTypeMessage(E.critical, error);
+    if (Array.isArray(dictionaries)) {
+      // @ts-ignore
+      this.bd_dictionaries = dictionaries;
     }
   }
 

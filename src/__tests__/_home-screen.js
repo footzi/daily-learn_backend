@@ -15,9 +15,7 @@ describe('Главный экран', () => {
   });
 
   it('При получении данных получаем 200, и массив dictionaries', async () => {
-    const result = await request(app)
-      .get('/screens/home')
-      .set('Authorization', `Bearer ${loginedUser.access_token}`);
+    const result = await request(app).get('/screens/home').set('Authorization', `Bearer ${loginedUser.access_token}`);
 
     const { dictionaries } = result.body.data;
 

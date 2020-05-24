@@ -1,4 +1,4 @@
-import { Column, PrimaryGeneratedColumn, Entity, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, Entity, ManyToOne } from 'typeorm';
 import Dictionaries from './Dictionaries';
 
 @Entity()
@@ -12,8 +12,6 @@ export default class Words {
     this.translate = '';
     this.nameCount = 0;
     this.translateCount = 0;
-    this.createDate = '';
-    this.updateDate = '';
   }
 
   @PrimaryGeneratedColumn()
@@ -34,12 +32,6 @@ export default class Words {
   @Column()
   translateCount: number;
 
-  @ManyToOne(type => Dictionaries, dictionary => dictionary, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Dictionaries, (dictionary) => dictionary, { onDelete: 'CASCADE' })
   dictionary: Dictionaries;
-
-  @CreateDateColumn()
-  createDate: string;
-
-  @UpdateDateColumn()
-  updateDate: string;
 }

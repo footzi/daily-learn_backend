@@ -1,4 +1,4 @@
-import { Column, PrimaryGeneratedColumn, Entity, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Column, PrimaryGeneratedColumn, Entity, OneToMany } from 'typeorm';
 import Words from './Words';
 
 @Entity()
@@ -7,8 +7,6 @@ export default class Dictionaries {
     this.id = 0;
     this.userId = 0;
     this.name = '';
-    this.createDate = '';
-    this.updateDate = '';
   }
 
   @PrimaryGeneratedColumn()
@@ -20,13 +18,7 @@ export default class Dictionaries {
   @Column()
   name: string;
 
-  @OneToMany(type => Words, words => words.dictionary, { onDelete: 'CASCADE' })
+  @OneToMany(() => Words, (words) => words.dictionary, { onDelete: 'CASCADE' })
   // @ts-ignore
   words: Words[];
-
-  @CreateDateColumn()
-  createDate: string;
-
-  @UpdateDateColumn()
-  updateDate: string;
 }

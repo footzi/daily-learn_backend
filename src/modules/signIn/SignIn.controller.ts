@@ -64,15 +64,11 @@ export default class SignInController implements ISignInController {
   }
 
   private async getUser(): Promise<void> {
-    try {
-      const user = await SignInModel.getUser(this.body.login);
+    const user = await SignInModel.getUser(this.body.login);
 
-      if (user && user instanceof User) {
-        this.user.id = user.id;
-        this.user.password = user.password;
-      }
-    } catch (error) {
-      throw errorTypeMessage(E.critical, error);
+    if (user && user instanceof User) {
+      this.user.id = user.id;
+      this.user.password = user.password;
     }
 
     if (!this.user.id && !this.user.password) {
@@ -106,10 +102,10 @@ export default class SignInController implements ISignInController {
     };
 
     const tokens = {
-      access_token : this.tokens.access,
+      access_token: this.tokens.access,
       refresh_token: this.tokens.refresh,
-      expire: this.tokens.expire
-    }
+      expire: this.tokens.expire,
+    };
 
     const data = sendData({ user, tokens });
     res.send(data);

@@ -17,9 +17,7 @@ describe('Токенизация', () => {
 
   // Проверка прав
   it('При заходе на защищеный маршрут с верным access токеном получаем 200', async () => {
-    const result = await request(app)
-      .get('/screens/home')
-      .set('Authorization', `Bearer ${loginedUser.access_token}`);
+    const result = await request(app).get('/screens/home').set('Authorization', `Bearer ${loginedUser.access_token}`);
 
     expect(result.statusCode).toEqual(200);
   });
@@ -45,9 +43,7 @@ describe('Токенизация', () => {
   });
 
   it('При заходе на защищеный маршрут с неверным токеном получаем 401 и объект ошибки', async () => {
-    const result = await request(app)
-      .get('/screens/home')
-      .set('Authorization', `Bearer ${randomstring.generate()}`);
+    const result = await request(app).get('/screens/home').set('Authorization', `Bearer ${randomstring.generate()}`);
     const { error } = JSON.parse(result.error.text);
 
     expect(result.statusCode).toEqual(401);
@@ -57,9 +53,7 @@ describe('Токенизация', () => {
 
   // Refresh
   it('При рефреше с верным рефреш токеном получаем 200 и набор новых токенов', async () => {
-    const result = await request(app)
-      .post('/api/refresh')
-      .set('Authorization', `Bearer ${loginedUser.refresh_token}`);
+    const result = await request(app).post('/api/refresh').set('Authorization', `Bearer ${loginedUser.refresh_token}`);
     const { user } = result.body.data;
 
     expect(result.statusCode).toEqual(200);
@@ -78,9 +72,7 @@ describe('Токенизация', () => {
   });
 
   it('При рефреше с неверным рефреш токеном получаем 401 и объект ошибки', async () => {
-    const result = await request(app)
-      .post('/api/refresh')
-      .set('Authorization', `Bearer ${randomstring.generate()}`);
+    const result = await request(app).post('/api/refresh').set('Authorization', `Bearer ${randomstring.generate()}`);
     const { error } = JSON.parse(result.error.text);
 
     expect(result.statusCode).toEqual(401);

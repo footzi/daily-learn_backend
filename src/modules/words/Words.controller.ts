@@ -23,7 +23,7 @@ export default class WordsController {
       const translates = JSON.parse(translate);
 
       const data = translates.map((item: string, index: number) => {
-        const word: ISaveWord = { name: '', translate: '', dictionary: 0, groupId: 0, nameCount: 0, translateCount: 0};
+        const word: ISaveWord = { name: '', translate: '', dictionary: 0, groupId: 0, nameCount: 0, translateCount: 0 };
 
         word.name = names[index] ? names[index] : names[0];
         word.translate = item;

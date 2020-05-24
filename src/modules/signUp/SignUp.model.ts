@@ -2,25 +2,28 @@ import { getRepository } from 'typeorm';
 import User from '../../entities/User';
 import { IUser } from '../../interfaces';
 import { IRequestSingUp } from './i-signup';
+import { errorTypeMessage } from '../../utils/errorHandler';
+import { E } from '../../constans';
 
 export default class SignUpModel {
   public static async hasUser(login: string): Promise<boolean | Error> {
-    const respone = await getRepository(User)
-      .findOne({ login })
-      .then((result: IUser | undefined): boolean => !!result)
-      .catch((error: Error): Error => error);
+    try {
+      const response = await getRepository(User).findOne({ login });
 
-    return respone;
+      return !!response;
+    } catch (err) {
+      throw errorTypeMessage(E.critical, err);
+    }
   }
 
   public static async saveUser(body: IRequestSingUp): Promise<IUser | Error> {
-    const user = new User();
+    try {
+      const user = new User();
+      const response = await getRepository(User).save(Object.assign(user, body));
 
-    const response = await getRepository(User)
-      .save(Object.assign(user, body))
-      .then((result: IUser): IUser => result)
-      .catch((error: Error): Error => error);
-
-    return response;
+      return response;
+    } catch (err) {
+      throw errorTypeMessage(E.critical, err);
+    }
   }
 }

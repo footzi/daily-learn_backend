@@ -6,8 +6,8 @@ export default class Tokens {
     this.id = 0;
     this.userId = 0;
     this.refresh = '';
-    this.createDate = '';
-    this.updateDate = '';
+    this.createDate = new Date();
+    this.updateDate = new Date();
   }
 
   @PrimaryGeneratedColumn()
@@ -20,8 +20,8 @@ export default class Tokens {
   refresh: string;
 
   @CreateDateColumn()
-  createDate: string;
+  createDate: Date;
 
   @UpdateDateColumn()
-  updateDate: string;
+  updateDate: Date;
 }
