@@ -9,6 +9,7 @@ import { checkTypeValue, sendData } from '../../utils';
 import { typesError, errorMessage, errorTypeMessage } from '../../utils/errorHandler';
 import { ISignUpController } from './i-signup';
 import { E } from '../../constans';
+import { clearScreenDown } from 'readline';
 
 const CONFIG = require('../../../server.config.json');
 
@@ -66,13 +67,7 @@ export default class SignUpController implements ISignUpController {
 
   private async hasUser(): Promise<void> {
     const { login } = this.body;
-    let hasUser;
-
-    try {
-      hasUser = await SingUpModel.hasUser(login);
-    } catch (error) {
-      throw errorTypeMessage(E.critical, error);
-    }
+    const hasUser = await SingUpModel.hasUser(login);
 
     if (hasUser) {
       throw errorTypeMessage(E.invalid_data, 'Данный пользователь уже существует');
@@ -100,25 +95,22 @@ export default class SignUpController implements ISignUpController {
 
     this.tokens.access = jwt.sign(access, CONFIG.secret, { expiresIn: CONFIG.expire_access });
     this.tokens.refresh = jwt.sign(refresh, CONFIG.secret, { expiresIn: CONFIG.expire_refresh });
+    
     const decoded: any = jwt.decode(this.tokens.access, CONFIG.secret);
     this.tokens.expire = decoded ? decoded.exp : 0;
 
-    try {
-      await TokenModel.save({ userId: this.user.id, refresh: this.tokens.refresh });
-    } catch (error) {
-      throw errorTypeMessage(E.critical, error);
-    }
+    await TokenModel.save({ userId: this.user.id, refresh: this.tokens.refresh });
   }
 
   private send(res: Response): void {
     const user = {
-      id: this.user.id
+      id: this.user.id,
     };
     const tokens = {
-      access_token : this.tokens.access,
+      access_token: this.tokens.access,
       refresh_token: this.tokens.refresh,
-      expire: this.tokens.expire
-    }
+      expire: this.tokens.expire,
+    };
 
     const data = sendData({ user, tokens });
     res.send(data);

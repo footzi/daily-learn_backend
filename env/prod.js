@@ -11,9 +11,9 @@ module.exports = {
     password: '039786a4',
     database: 'heroku_311563abd958ad8',
     synchronize: false,
-    entities: ['./build/entities/*.js']
+    entities: ['./build/entities/*.js'],
   },
   secret: 'jwt-secret',
   expire_access: '0.5h',
-  expire_refresh: '30d'
+  expire_refresh: '30d',
 };

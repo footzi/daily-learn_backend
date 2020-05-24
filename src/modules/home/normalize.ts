@@ -3,7 +3,7 @@ import { IDictionary, IWord } from '../../interfaces';
 
 export const normailizeDictionaries = (dictionaries: Array<IDictionary>): Array<INormalizeDictionary> => {
   const normalizeWords = (words: Array<IWord>): Array<INormalizeWords> => {
-    return words.map(item => {
+    return words.map((item) => {
       const { id, name, translate, nameCount, translateCount, groupId } = item;
       return { id, name, translate, nameCount, translateCount, groupId };
     });
@@ -15,7 +15,7 @@ export const normailizeDictionaries = (dictionaries: Array<IDictionary>): Array<
       return {
         id,
         name,
-        words: normalizeWords(words)
+        words: normalizeWords(words),
       };
     }
   );

@@ -95,7 +95,7 @@ describe('Работа со словами', () => {
       .set('Authorization', `Bearer ${loginedUser.access_token}`);
 
     const { dictionaries } = dictionaries_result.body.data;
-    const dict = dictionaries.find(item => item.id === dict_id);
+    const dict = dictionaries.find((item) => item.id === dict_id);
 
     word_id = dict.words[0].id;
 
@@ -117,8 +117,8 @@ describe('Работа со словами', () => {
       .set('Authorization', `Bearer ${loginedUser.access_token}`);
 
     const { dictionaries } = dictionaries_result.body.data;
-    const dict = dictionaries.find(item => item.id === dict_id);
-    const word = dict.words.find(item => item.id === word_id);
+    const dict = dictionaries.find((item) => item.id === dict_id);
+    const word = dict.words.find((item) => item.id === word_id);
 
     expect(word.ru_count).toBe(1);
   });

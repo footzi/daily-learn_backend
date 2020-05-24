@@ -28,7 +28,7 @@ export default class RefreshController implements ITokensController {
     this.decoded = { id: 0 };
     this.user = {
       id: 0,
-      refresh: ''
+      refresh: '',
     };
     this.newtokens = { access: '', refresh: '', expire: 0 };
   }
@@ -134,7 +134,7 @@ export default class RefreshController implements ITokensController {
     const tokens = {
       access_token: this.newtokens.access,
       refresh_token: this.newtokens.refresh,
-      expire: this.newtokens.expire
+      expire: this.newtokens.expire,
     };
     const data = sendData({ tokens });
     res.send(data);

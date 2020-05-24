@@ -33,7 +33,7 @@ export default class DictionaryModel {
     const { userId } = body;
 
     try {
-      return await getRepository(Dictionaries).find({ where: { userId }, relations: ['words']});
+      return await getRepository(Dictionaries).find({ where: { userId }, relations: ['words'] });
     } catch (err) {
       throw errorTypeMessage(E.critical, err);
     }

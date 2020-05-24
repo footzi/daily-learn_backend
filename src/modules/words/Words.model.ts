@@ -9,8 +9,8 @@ export default class WordsModel {
     try {
       const result = await getRepository(Words).findOne({
         order: {
-          groupId: 'DESC'
-        }
+          groupId: 'DESC',
+        },
       });
 
       return Number(result ? result.groupId : 0);

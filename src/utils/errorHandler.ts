@@ -4,7 +4,7 @@ import { E } from '../constans';
 export const typesError: any = {
   [E.not_access]: 401,
   [E.invalid_data]: 403,
-  [E.critical]: 500
+  [E.critical]: 500,
 };
 
 export const errorMessage = (err: Error): IErrorMessage => ({ message: err.message, stack: JSON.stringify(err.stack) });

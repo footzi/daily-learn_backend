@@ -46,10 +46,7 @@ describe('Авторизация', () => {
   });
 
   it('С некорректными данными получаем 403, и сообщение об ошибке', async () => {
-    const result = await request(app)
-      .post('/api/signin')
-      .field('login', mockUser.login)
-      .field('password', []);
+    const result = await request(app).post('/api/signin').field('login', mockUser.login).field('password', []);
 
     const { error } = JSON.parse(result.error.text);
 

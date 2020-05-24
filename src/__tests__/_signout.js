@@ -16,9 +16,7 @@ describe('Разлогирование', () => {
   });
 
   it('При успешном разлогировании получаем 200, и success: true', async () => {
-    const result = await request(app)
-      .post('/api/signout')
-      .set('Authorization', `Bearer ${loginedUser.access_token}`);
+    const result = await request(app).post('/api/signout').set('Authorization', `Bearer ${loginedUser.access_token}`);
 
     const { success } = result.body.data;
 
@@ -37,9 +35,7 @@ describe('Разлогирование', () => {
   });
 
   it('При разлогировании с неверным токеном получаем 401 и объект ошибки', async () => {
-    const result = await request(app)
-      .post('/api/signout')
-      .set('Authorization', `Bearer ${randomstring.generate()}`);
+    const result = await request(app).post('/api/signout').set('Authorization', `Bearer ${randomstring.generate()}`);
     const { error } = JSON.parse(result.error.text);
 
     expect(result.statusCode).toEqual(401);
