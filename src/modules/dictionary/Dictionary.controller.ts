@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import DictionaryModel from './Dictionary.model';
 import { sendData, checkTypeValue } from '../../utils';
 import { typesError, errorMessage, errorTypeMessage } from '../../utils/errorHandler';
 import { E } from '../../constans';
+import DictionaryModel from './Dictionary.model';
 
 export default class DictionaryController {
   public static async create(req: Request, res: Response): Promise<void> {
