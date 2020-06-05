@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import DictionaryModel from '../dictionary/Dictionary.model';
+import UserModel from '../user/User.model';
 import { IDictionary } from '../../interfaces';
 import { sendData } from '../../utils';
 import { typesError, errorMessage } from '../../utils/errorHandler';
@@ -8,6 +9,7 @@ import { normailizeDictionaries } from './normalize';
 
 export default class HomeController {
   userId: number;
+  user: object;
 
   dictionaries: Array<INormalizeDictionary>;
 
@@ -17,6 +19,7 @@ export default class HomeController {
     this.userId = 0;
     this.bd_dictionaries = [];
     this.dictionaries = [];
+    this.user = {};
   }
 
   public async getData(req: Request, res: Response): Promise<void> {
@@ -24,6 +27,7 @@ export default class HomeController {
 
     try {
       await this.getDictionaries();
+      await this.getUser();
       this.dictionaries = normailizeDictionaries(this.bd_dictionaries);
 
       this.send(res);
@@ -44,8 +48,16 @@ export default class HomeController {
     }
   }
 
+  private async getUser(): Promise<void> {
+    const user = await UserModel.get(this.userId);
+
+    if (user) {
+      this.user = user;
+    }
+  }
+
   private send(res: Response): void {
-    const data = sendData({ dictionaries: this.dictionaries });
+    const data = sendData({ dictionaries: this.dictionaries, user: this.user });
     res.send(data);
   }
 }
