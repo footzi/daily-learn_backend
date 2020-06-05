@@ -1,5 +1,5 @@
 export interface IUpdateUser {
-    login: string | undefined;
-    email: string | undefined;
-    paws: number | undefined;
+    login?: string;
+    email?: string;
+    paws?: number;
 }

@@ -18,12 +18,10 @@ export default class UserModel {
   }
 
   public static async change(id: number, body: IUpdateUser): Promise<void | Error> {
-
-    console.log(body);
-      try {
-        const user = await getRepository(User).update({ id }, {login: 'vladik', email: "test"});
-      } catch(err) {
-        throw errorTypeMessage(E.critical, err);
-      }
+    try {
+      await getRepository(User).update({ id }, body);
+    } catch (err) {
+      throw errorTypeMessage(E.critical, err);
+    }
   }
 }

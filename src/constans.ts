@@ -4,4 +4,4 @@ export const E = {
   critical: 'critical',
 };
 
-export const T = {};
+export const USER_REQUEST_FIELDS: Array<string> = ['login', 'email', 'paws'];
