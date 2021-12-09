@@ -82,7 +82,7 @@ export default class SignUpController implements ISignUpController {
       const user = await SingUpModel.saveUser({ login, email, password: passwordHash });
 
       if (user instanceof User) {
-        this.user.id = user.id;
+        this.user = user;
       }
     } catch (error) {
       throw errorTypeMessage(E.critical, error);
@@ -103,16 +103,13 @@ export default class SignUpController implements ISignUpController {
   }
 
   private send(res: Response): void {
-    const user = {
-      id: this.user.id,
-    };
     const tokens = {
       access_token: this.tokens.access,
       refresh_token: this.tokens.refresh,
       expire: this.tokens.expire,
     };
 
-    const data = sendData({ user, tokens });
+    const data = sendData({ user: this.user, tokens });
     res.send(data);
   }
 }
