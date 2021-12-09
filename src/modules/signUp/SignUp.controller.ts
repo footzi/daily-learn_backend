@@ -22,6 +22,7 @@ export default class SignUpController implements ISignUpController {
 
   user: {
     id: number;
+    password: string;
   };
 
   tokens: {
@@ -32,7 +33,7 @@ export default class SignUpController implements ISignUpController {
 
   constructor() {
     this.body = { login: '', email: '', password: '' };
-    this.user = { id: 0 };
+    this.user = { id: 0, password: '' };
     this.tokens = { access: '', refresh: '', expire: 0 };
   }
 
