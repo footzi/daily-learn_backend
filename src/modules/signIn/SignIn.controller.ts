@@ -102,6 +102,10 @@ export default class SignInController implements ISignInController {
       expire: this.tokens.expire,
     };
 
+    if (this.user.password) {
+      delete this.user.password;
+    }
+
     const data = sendData({ user: this.user, tokens });
     res.send(data);
   }

@@ -109,6 +109,10 @@ export default class SignUpController implements ISignUpController {
       expire: this.tokens.expire,
     };
 
+    if (this.user.password) {
+      delete this.user.password;
+    }
+
     const data = sendData({ user: this.user, tokens });
     res.send(data);
   }

@@ -21,10 +21,6 @@ export default class SignUpModel {
       const user = new User();
       const response = await getRepository(User).save(Object.assign(user, body));
 
-      if (response) {
-        delete response.password;
-      }
-
       return response;
     } catch (err) {
       throw errorTypeMessage(E.critical, err);

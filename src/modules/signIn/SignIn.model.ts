@@ -9,10 +9,6 @@ export default class SignInModel {
     try {
       const user = await getRepository(User).findOne({ login });
 
-      if (user) {
-        delete user.password;
-      }
-
       return user;
     } catch (err) {
       throw errorTypeMessage(E.critical, err);
