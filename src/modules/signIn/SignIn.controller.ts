@@ -67,8 +67,7 @@ export default class SignInController implements ISignInController {
     const user = await SignInModel.getUser(this.body.login);
 
     if (user && user instanceof User) {
-      this.user.id = user.id;
-      this.user.password = user.password;
+      this.user = user;
     }
 
     if (!this.user.id && !this.user.password) {
@@ -97,17 +96,13 @@ export default class SignInController implements ISignInController {
   }
 
   private send(res: Response): void {
-    const user = {
-      id: this.user.id,
-    };
-
     const tokens = {
       access_token: this.tokens.access,
       refresh_token: this.tokens.refresh,
       expire: this.tokens.expire,
     };
 
-    const data = sendData({ user, tokens });
+    const data = sendData({ user: this.user, tokens });
     res.send(data);
   }
 }
