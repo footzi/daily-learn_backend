@@ -10,7 +10,7 @@
     "postinstall": "npm run build",
     "test": "jest",
     "test:match": "jest -t",
-    "start:pm2": "pm2 start build/main.js --name daily-learn_backend",
+    "start:pm2": "pm2 start ./build/index.js --name daily-learn_backend",
     "stop:pm2": "pm2 stop daily-learn_backend",
     "deploy:prod": "bash ./deploy/prod.bash",
     "lint": "eslint -c .eslintrc --ext .js,.ts ./src",
