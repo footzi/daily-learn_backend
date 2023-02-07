@@ -17,7 +17,9 @@ export default class UserController {
 
       res.send(sendData({ success: true, user }));
     } catch (error) {
+      // @ts-ignore
       const code = typesError[error.type];
+      // @ts-ignore
       const data = sendData('', errorMessage(error.content));
 
       res.status(code).send(data);
@@ -30,12 +32,12 @@ export default class UserController {
     try {
       const body = USER_REQUEST_FIELDS.reduce((acc: object, current: string) => {
         const field = req.body[current];
-  
+
         if (field) {
           // @ts-ignore
           acc[current] = field;
         }
-  
+
         return acc;
       }, {});
 
@@ -47,7 +49,9 @@ export default class UserController {
 
       res.send(sendData({ success: true }));
     } catch (error) {
+      // @ts-ignore
       const code = typesError[error.type];
+      // @ts-ignore
       const data = sendData('', errorMessage(error.content));
 
       res.status(code).send(data);

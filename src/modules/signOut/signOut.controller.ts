@@ -5,8 +5,9 @@ import { parseBearer, sendData } from '../../utils';
 import { typesError, errorMessage, errorTypeMessage } from '../../utils/errorHandler';
 import { E } from '../../constans';
 import { ISignOutController } from './i-signout';
+import CONFIG from '../../config';
 
-const CONFIG = require('../../../server.config.json');
+const { JWT_SECRET } = CONFIG;
 
 export default class SignOutController implements ISignOutController {
   access_token: string;
@@ -26,7 +27,9 @@ export default class SignOutController implements ISignOutController {
 
       res.send(sendData({ success: true }));
     } catch (error) {
+      // @ts-ignore
       const code = typesError[error.type];
+      // @ts-ignore
       const data = sendData('', errorMessage(error.content));
 
       res.status(code).send(data);
@@ -43,7 +46,7 @@ export default class SignOutController implements ISignOutController {
 
   getUserId(): void {
     try {
-      const decoded: any = jwt.verify(this.access_token, CONFIG.secret);
+      const decoded: any = jwt.verify(this.access_token, JWT_SECRET);
 
       if (typeof decoded === 'object') {
         this.decoded.id = decoded.id;
@@ -51,6 +54,7 @@ export default class SignOutController implements ISignOutController {
         throw errorTypeMessage(E.not_access, 'Ошибка чтения токена');
       }
     } catch (err) {
+      // @ts-ignore
       throw errorTypeMessage(E.not_access, err.message);
     }
   }
