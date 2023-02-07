@@ -4,8 +4,7 @@ import express from 'express';
 import cors from 'cors';
 import api from './routers/api';
 import screens from './routers/screens';
-
-const CONFIG = require('../server.config.json');
+import CONFIG from './config';
 
 const app = express();
 
@@ -21,8 +20,8 @@ app.use('/api', cors({ credentials: true, origin: `http://localhost:3000` }), ap
 app.use('/screens', cors({ credentials: true, origin: `http://localhost:3000` }), screens);
 
 export const listenApp = (): void => {
-  app.listen(CONFIG.port, CONFIG.host, (): void => {
-    console.log(`> Api listening on http://${CONFIG.host}:${CONFIG.port}`);
+  app.listen(CONFIG.PORT, (): void => {
+    console.log(`> Api listening on ${CONFIG.PORT}`);
   });
 };
 

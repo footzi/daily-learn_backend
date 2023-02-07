@@ -32,7 +32,9 @@ export default class HomeController {
 
       this.send(res);
     } catch (error) {
+      // @ts-ignore
       const code = typesError[error.type];
+      // @ts-ignore
       const data = sendData('', errorMessage(error.content));
 
       res.status(code).send(data);

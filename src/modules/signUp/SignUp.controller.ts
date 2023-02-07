@@ -9,9 +9,9 @@ import { checkTypeValue, sendData } from '../../utils';
 import { typesError, errorMessage, errorTypeMessage } from '../../utils/errorHandler';
 import { ISignUpController } from './i-signup';
 import { E } from '../../constans';
-import { clearScreenDown } from 'readline';
+import CONFIG from '../../config';
 
-const CONFIG = require('../../../server.config.json');
+const { JWT_SECRET, JWT_EXPIRES_IN, JWT_REFRESH_EXPIRES_IN } = CONFIG;
 
 export default class SignUpController implements ISignUpController {
   body: {
@@ -49,7 +49,9 @@ export default class SignUpController implements ISignUpController {
       await this.createTokens();
       this.send(res);
     } catch (error) {
+      // @ts-ignore
       const code = typesError[error.type];
+      // @ts-ignore
       const data = sendData('', errorMessage(error.content));
 
       res.status(code).send(data);
@@ -86,6 +88,7 @@ export default class SignUpController implements ISignUpController {
         this.user = user;
       }
     } catch (error) {
+      // @ts-ignore
       throw errorTypeMessage(E.critical, error);
     }
   }
@@ -94,10 +97,11 @@ export default class SignUpController implements ISignUpController {
     const access = { id: this.user.id };
     const refresh = { id: this.user.id, key: randomstring.generate() };
 
-    this.tokens.access = jwt.sign(access, CONFIG.secret, { expiresIn: CONFIG.expire_access });
-    this.tokens.refresh = jwt.sign(refresh, CONFIG.secret, { expiresIn: CONFIG.expire_refresh });
-    
-    const decoded: any = jwt.decode(this.tokens.access, CONFIG.secret);
+    this.tokens.access = jwt.sign(access, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+    this.tokens.refresh = jwt.sign(refresh, JWT_SECRET, { expiresIn: JWT_REFRESH_EXPIRES_IN });
+
+    // @ts-ignore
+    const decoded: any = jwt.decode(this.tokens.access, JWT_SECRET);
     this.tokens.expire = decoded ? decoded.exp : 0;
 
     await TokenModel.save({ userId: this.user.id, refresh: this.tokens.refresh });
@@ -111,6 +115,7 @@ export default class SignUpController implements ISignUpController {
     };
 
     if (this.user.password) {
+      // @ts-ignore
       delete this.user.password;
     }
 

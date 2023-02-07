@@ -1,0 +1,51 @@
+version: "3.9"
+
+services:
+  dev:
+    container_name: daily-learn-dev
+    build:
+      context: .
+      target: development
+      dockerfile: ./Dockerfile
+    command: yarn start:dev
+    ports:
+      - "9999:9999"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+
+  prod:
+    container_name: daily-learn-prod
+    build:
+      context: .
+      target: production
+      dockerfile: ./Dockerfile
+    command: npm run start:prod
+    ports:
+      - "9999:9999"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+
+  postgres:
+    container_name: daily-learn-postgres
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./database:/var/lib/postgresql/data

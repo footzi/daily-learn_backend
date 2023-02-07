@@ -7,8 +7,9 @@ import { parseBearer, sendData } from '../../utils';
 import { ITokensController } from './i-tokens';
 import { typesError, errorMessage, errorTypeMessage } from '../../utils/errorHandler';
 import { E } from '../../constans';
+import CONFIG from '../../config';
 
-const CONFIG = require('../../../server.config.json');
+const { JWT_SECRET, JWT_EXPIRES_IN, JWT_REFRESH_EXPIRES_IN } = CONFIG;
 
 export default class RefreshController implements ITokensController {
   refresh_token: string;
@@ -43,7 +44,7 @@ export default class RefreshController implements ITokensController {
 
     const token = parseBearer(req.headers.authorization);
 
-    jwt.verify(token, CONFIG.secret, (err: any, decoded: any) => {
+    jwt.verify(token, JWT_SECRET, (err: any, decoded: any) => {
       if (decoded) {
         res.locals.userId = decoded.id;
         next();
@@ -64,7 +65,9 @@ export default class RefreshController implements ITokensController {
       await this.createTokens();
       this.send(res);
     } catch (error) {
+      // @ts-ignore
       const code = typesError[error.type];
+      // @ts-ignore
       const data = sendData('', errorMessage(error.content));
 
       res.status(code).send(data);
@@ -81,7 +84,7 @@ export default class RefreshController implements ITokensController {
 
   getUserId(): void {
     try {
-      const decoded: any = jwt.verify(this.refresh_token, CONFIG.secret);
+      const decoded: any = jwt.verify(this.refresh_token, JWT_SECRET);
 
       if (typeof decoded === 'object') {
         this.decoded.id = decoded.id;
@@ -89,6 +92,7 @@ export default class RefreshController implements ITokensController {
         throw errorTypeMessage(E.not_access, 'Ошибка чтения токена');
       }
     } catch (err) {
+      // @ts-ignore
       throw errorTypeMessage(E.not_access, err.message);
     }
   }
@@ -102,6 +106,7 @@ export default class RefreshController implements ITokensController {
         this.user.refresh = response.refresh;
       }
     } catch (error) {
+      // @ts-ignore
       throw errorTypeMessage(E.critical, error);
     }
 
@@ -122,9 +127,10 @@ export default class RefreshController implements ITokensController {
     const access = { id: this.user.id };
     const refresh = { id: this.user.id, key: randomstring.generate() };
 
-    this.newtokens.access = jwt.sign(access, CONFIG.secret, { expiresIn: CONFIG.expire_access });
-    this.newtokens.refresh = jwt.sign(refresh, CONFIG.secret, { expiresIn: CONFIG.expire_refresh });
-    const decoded: any = jwt.decode(this.newtokens.access, CONFIG.secret);
+    this.newtokens.access = jwt.sign(access, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+    this.newtokens.refresh = jwt.sign(refresh, JWT_SECRET, { expiresIn: JWT_REFRESH_EXPIRES_IN });
+    // @ts-ignore
+    const decoded: any = jwt.decode(this.newtokens.access, JWT_SECRET);
     this.newtokens.expire = decoded ? decoded.exp : 0;
 
     await TokenModel.save({ userId: this.user.id, refresh: this.newtokens.refresh });

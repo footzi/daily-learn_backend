@@ -26,7 +26,9 @@ export default class DictionaryController {
         throw errorTypeMessage(E.invalid_data, 'Словарь с таким именем уже существует');
       }
     } catch (error) {
+      // @ts-ignore
       const code = typesError[error.type];
+      // @ts-ignore
       const data = sendData('', errorMessage(error.content));
 
       res.status(code).send(data);
@@ -41,7 +43,9 @@ export default class DictionaryController {
 
       res.send(sendData({ dictionaries }));
     } catch (error) {
+      // @ts-ignore
       const code = typesError[error.type];
+      // @ts-ignore
       const data = sendData('', errorMessage(error.content));
 
       res.status(code).send(data);
@@ -62,7 +66,9 @@ export default class DictionaryController {
 
       res.send(sendData({ success: true }));
     } catch (error) {
+      // @ts-ignore
       const code = typesError[error.type];
+      // @ts-ignore
       const data = sendData('', errorMessage(error.content));
 
       res.status(code).send(data);
