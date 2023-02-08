@@ -5,6 +5,8 @@ import { sendData, checkTypeValue } from '../../utils';
 import { typesError, errorMessage, errorTypeMessage } from '../../utils/errorHandler';
 import { E } from '../../constans';
 
+export const generateRandomId = () => Math.floor(Math.random() * 1000000);
+
 export default class WordsController {
   public static async create(req: Request, res: Response): Promise<void> {
     const { name, translate, dictionary_id } = req.body;
@@ -18,9 +20,10 @@ export default class WordsController {
         throw errorTypeMessage(E.invalid_data, 'Oт клиента получены неверные данные');
       }
 
-      const lastGroupId = await WordsModel.getLastGroupId();
+      // const lastGroupId = await WordsModel.getLastGroupId();
       const names = JSON.parse(name);
       const translates = JSON.parse(translate);
+      const groupId = generateRandomId();
 
       const data = translates.map((item: string, index: number) => {
         const word: ISaveWord = { name: '', translate: '', dictionary: 0, groupId: 0, nameCount: 0, translateCount: 0 };
@@ -28,14 +31,14 @@ export default class WordsController {
         word.name = names[index] ? names[index] : names[0];
         word.translate = item;
         word.dictionary = Number(dictionary_id);
-        word.groupId = 0;
+        word.groupId = groupId;
         // word.groupId = typeof lastGroupId === 'number' ? lastGroupId + 1 : 0;
 
         return word;
       });
 
-      const item = await WordsModel.save(data);
-      const groupId = Array.isArray(item) ? item[0].groupId : null;
+      await WordsModel.save(data);
+      // const groupId = Array.isArray(item) ? item[0].groupId : null;
 
       res.send(sendData({ success: true, groupId }));
     } catch (error) {
