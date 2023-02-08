@@ -7,13 +7,14 @@ import { AppDataSource } from '../../index';
 export default class WordsModel {
   public static async getLastGroupId(): Promise<number | Error> {
     try {
-      const result = await AppDataSource.getRepository(Words).find({
-        order: {
-          groupId: 'DESC',
-        },
-      });
+      // const result = await AppDataSource.getRepository(Words).find({
+      //   order: {
+      //     groupId: 'DESC',
+      //   },
+      // });
 
-      return Number(result && result.length > 0 ? result[result.length - 1].groupId : 0);
+      return 0;
+      // return Number(result && result.length > 0 ? result[result.length - 1].groupId : 0);
     } catch (err) {
       // @ts-ignore
       throw errorTypeMessage(E.critical, err);
