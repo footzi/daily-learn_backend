@@ -28,7 +28,8 @@ export default class WordsController {
         word.name = names[index] ? names[index] : names[0];
         word.translate = item;
         word.dictionary = Number(dictionary_id);
-        word.groupId = typeof lastGroupId === 'number' ? lastGroupId + 1 : 0;
+        word.groupId = 0;
+        // word.groupId = typeof lastGroupId === 'number' ? lastGroupId + 1 : 0;
 
         return word;
       });
